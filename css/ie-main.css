@@ -1,0 +1,26 @@
+#menu-bg {
+    display:none;
+}
+
+#menu {
+    float:left;
+}
+
+.fixed {
+    float:left;
+}
+
+#content {
+    float:left;
+}
+
+.playbutton {
+    display:none;
+}
+
+.frontpage .block,
+.personpage .rblock,
+.project .rblock {
+    width:280px;
+    clear:right;
+}

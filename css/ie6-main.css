@@ -1,0 +1,39 @@
+#menu-bg {
+    display:none;
+}
+
+#menu {
+    float:left;
+}
+
+.fixed {
+    float:left;
+}
+
+#content {
+    float:left;
+}
+
+.playbutton {
+    display:none;
+}
+
+.frontpage .block,
+.personpage .rblock,
+.project .rblock {
+    width:280px;
+    clear:right;
+}
+
+#main .deadline,
+#main .file {
+    width:185px;
+}
+
+#main .deadline {
+    float:none;
+}
+
+#container {
+    display:inline;
+}

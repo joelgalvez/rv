@@ -1,0 +1,8 @@
+#main .deadline,
+#main .file {
+    width:185px;
+}
+
+#main .deadline {
+    float:none;
+}

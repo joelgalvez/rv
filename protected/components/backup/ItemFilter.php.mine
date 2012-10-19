@@ -1,0 +1,62 @@
+<?php
+/* 
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+class ItemFilter {
+    public static function get($itemUploadId,   $itemUpload = null) {
+        if( $itemUpload == null) {
+            $itemUpload = ItemUpload::model()->findByPk($itemUploadId);
+        }
+
+        if( $itemUpload != null) {
+            $criteria = new CDbCriteria();
+            $criteria->condition = "type = 'upload'";
+            $criteria->order = 'modified, position';
+            
+            switch($itemUpload->type) {
+                case 'uploadSelection':
+                    $criteria->condition = 'itemid = :itemId';
+                    $criteria->params = array(':itemId'=>$itemUpload->uploadSelectedItemId);
+                    
+                    return ItemUpload::model()->find($criteria);
+
+                case 'uploadFilter':
+                    $_c = new CDbCriteria();
+                    $_c->condition = 'itemid = :itemId';
+                    $_c->params = array(':itemId'=>$itemUpload->itemId);
+                    $criteria->mergeWith($_c);
+                    
+                    if($itemUpload->uploadFilterCount > 0)
+                        $criteria->limit = $itemUpload->uploadFilterCount;
+                    else if($itemUpload->itemFilterCount == -1)
+                            $criteria->limit = $itemUpload->uploadFilterCount; //TODO: do fillup logics here
+
+                    if( $itemUpload->categoryId != null) {
+                        $_criteria = new CDbCriteria();
+                        $_criteria->condition = 'categoryId = :categoryId';
+                        $_criteria->params = array(':categoryId'=> $itemUpload->categoryId);
+
+                        $criteria->mergeWith($_criteria);
+                    }
+
+                    if( $itemUpload->namespaceId != null) {
+                        $_criteria = new CDbCriteria();
+                        $_criteria->condition = 'namespaceId = :namespaceId';
+                        $_criteria->params = array(':namespaceId'=> $itemUpload->namespaceId);
+
+                        $criteria->mergeWith($_criteria);
+                    }
+
+                    return ItemUpload::model()->findAll($criteria);
+
+               default:
+                   throw new CHttpException(500, "Invalid pertaion");
+                   break;
+            }
+        }else {
+            throw new CHttpException(500, "item information is missing");
+        }
+    }
+}

@@ -1,0 +1,1472 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+
+:focus {
+	outline: 1;
+}
+
+
+html {
+    overflow-y: scroll;
+}
+
+body {
+	line-height: 1;
+	color: black;
+	background: white;
+	font-family:serif;
+	font-size:14px;
+	line-height:18px;
+
+}
+ol, ul {
+	list-style: none;
+}
+
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+	border-collapse: separate;
+	border-spacing: 0;
+}
+caption, th, td {
+	text-align: left;
+	font-weight: normal;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: "";
+}
+
+blockquote, q {
+	quotes: "" "";
+}
+
+em {
+	font-weight:bold;
+}
+
+h1 {
+	margin-top:8px;
+	font-size:22px;
+	line-height:36px;
+	letter-spacing:1px;
+	font-weight:normal;
+	text-align:center;
+	margin-bottom:18px
+}
+
+h2 {
+	font-family:sans-serif;
+	margin-top:18px;
+	font-size:12px;
+	line-height:18px;
+	letter-spacing:3px;
+	text-align:center;
+	text-transform:uppercase;
+	margin-bottom:6px;
+	font-weight:normal;
+}
+
+h3 {
+        margin-top:16px;
+	letter-spacing:2px;
+	margin-left:16px;
+	font-weight:normal;
+}
+
+.fixed h3:first-child {
+    margin-top:0px;
+}
+
+li {
+	list-style-type:disc;
+	margin:0px 9px 9px 9px;
+
+}
+
+li li {
+	list-style-type:circle;
+	padding-bottom:0px;
+}
+
+ul,ol {
+	margin:18px;
+}
+
+hr {
+	margin:15px;
+}
+
+table {
+
+	border-top: 1px solid #000;
+	border-left: 1px solid #000;
+	border-right: 1px solid #000;
+	margin:18px;
+}
+
+th {
+	text-decoration:underline;
+	padding:18px;
+}
+
+tr {
+
+}
+
+td {
+	border-bottom:1px solid #000;
+}
+
+.hidden {
+    display:none;
+}
+
+/* Menu */
+
+a.black {
+    color:#000;
+    border-bottom:1px solid #000;
+    text-decoration:none;
+}
+
+#adminmenu ul li a,
+#main .person a.blue,
+#adminmenu a.blue,
+a.blue,
+a.openadmin {
+    font-family:sans-serif;
+    font-weight:bold;
+    color:#00f;
+    text-decoration:none;
+    border-bottom:1px solid #00f;
+    font-size:12px;
+    line-height:16px;
+}
+
+#menu {
+	width:190px;
+	padding-right:15px;
+	padding-left:0px;
+	padding-bottom:18px;
+	padding-top:2px;
+	display:inline;
+        margin-left:15px;
+        margin-top:15px;
+        top:0px;
+        left:0px;
+        position:fixed;
+}
+
+.menuitem.ind {
+	margin-left:15px;
+}
+
+.menuitem {
+
+	font-size:12px;
+	line-height:16px;
+	font-family:sans-serif;
+}
+
+
+.home a {
+	border-bottom:1px solid #000;
+}
+
+.home {
+	margin-bottom:14px;
+}
+
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+
+/* Main */
+
+.editpage {
+    float:right;
+    margin:0 15px 15px 0px;
+}
+
+#container {
+	padding:15px 0px 0px 215px;
+	min-width:745px;
+	_width:745px;
+        overflow:hidden;
+
+}
+
+#content {
+        overflow:hidden;
+
+}
+
+#main {
+	padding-bottom:600px;
+        overflow:hidden;
+}
+
+
+pre {
+	font-family:monospace;
+	font-size:11px;
+	line-height:14px;
+	margin:18px;
+
+}
+
+.file pre {
+    margin:0px;
+    padding-top:6px;
+}
+
+#main .block p+p {
+	text-indent:16px;
+}
+
+
+
+#main .att .caption-area p {
+        margin-bottom:0px;
+}
+
+
+
+#main .block a {
+	color:#00f;
+	text-decoration:none;
+	border-bottom:1px solid #00f;
+}
+
+.hide {
+	display:none;
+}
+
+.fixed {
+	width:730px;
+	float:left;
+      
+}
+
+.fluid {
+	min-width:730px;
+        max-width:1300px;
+
+}
+
+#main .jumpmenu {
+	float:right;
+	display:inline;
+	font-size:11px;
+	line-height:15px;
+	font-family:monospace;
+	margin:0px 0px 36px 0px;
+        width:180px;
+}
+
+#main .jumpmenu a {
+	color:#000;
+	text-decoration:none;
+	border-bottom:1px solid #000;
+}
+
+#main .anchor {
+    margin-bottom:0px;
+}
+
+.ed-caption {
+	font-family:sans-serif;
+	font-size:12px;
+        line-height:16px;
+        margin-top:6px;
+}
+
+#editing {
+	color:#f00;
+}
+
+/* Login */
+
+#login a {
+    text-decoration:none;
+    border-bottom:1px solid #00f;
+    color:#00f;
+}
+
+
+#login {
+    padding:15px;
+}
+
+#login #close_notloggedin,
+#login #close {
+    font-size:12px;
+    line-height:16px;
+    font-family:sans-serif;
+    float:right;
+}
+
+#login #msg {
+    float:left;
+
+    width:380px;
+    margin:40px;
+}
+
+#login #close_notloggedin a,
+#login #close a {
+    color:#000;
+    text-decoration:none;
+    border-bottom:1px solid #000;
+}
+
+.loginform {
+    width: 320px;
+    margin:145px auto;
+}
+
+.loginform input[type=text],
+.loginform input[type=password] {
+    width:150px;
+}
+
+.loginform input[type=submit] {
+    margin-left:80px;
+}
+
+label
+{
+    width: 100px;
+    float: left;
+    text-align: right;
+    margin-right: 15px;
+    display: block
+}
+
+.yiiForm label
+{
+    width: 200px;
+}
+
+/* My project / student page / userpage = all the same */
+
+#userpage {
+    margin-bottom:30px;
+    float:left;
+    clear:left;
+}
+
+
+.personpage-sub {
+    float:left;
+    clear:both;
+}
+
+a.pitem {
+    
+    margin-bottom:4px;
+    float:left;
+    clear:left;
+
+    color:#00f;
+    text-decoration:none;
+    
+    font-family:sans-serif;
+    font-weight:bold;
+    font-size:18px;
+    line-height:24px;
+    border-bottom:2px solid #00f;
+}
+
+
+
+/* Uploads */
+
+
+.deleteproject {
+    margin-right:15px;
+}
+
+.shortversion {
+    display:none;
+}
+
+.project .shortversion {
+    display:block;
+}
+
+.graduation h1 {
+    margin-top:0px;
+}
+
+.gradcategoryyear {
+    font-weight:normal;
+}
+
+.project .rblock h1 {
+    clear:right;
+}
+
+
+.project .uploadbutton {
+    float:right;
+    margin:0px 15px 15px 15px;
+}
+
+.openadmin .url {
+    display:none;
+}
+
+.openadmin .width {
+    display:none;
+}
+
+
+.zoomed .texttitle {
+	padding:36px 18px;
+}
+
+.texttitle {
+	float:left;
+	display:inline;
+}
+
+.att {
+
+}
+
+.att .icon {
+	float:left;
+        border:1px solid #eee;
+}
+
+.att .icon p {
+
+}
+
+.att .icon .texttitle p {
+    overflow:hidden;
+}
+
+.att .icon {
+}
+
+
+.videotn {
+    
+    
+}
+
+
+
+#result .att.upload .icon,
+.filter .att.upload .icon {
+	border:8px solid #00f;
+}
+
+.att.news .icon {
+	border:2px solid #aaa;
+}
+
+
+.att.image.graduationflyer .icon,
+#result .att.news .icon,
+.filter .att.news .icon {
+	border:8px solid #aaa;
+}
+
+
+.texttitle {
+	padding:18px 18px 20px 18px;
+	font-size:26px;
+	font-family:monospace;
+	line-height:30px;
+	text-align:center;
+
+	font-family:serif;
+	font-weight:bold;
+	text-align:center;      
+}
+
+
+#main .att.image.graduationflyer .caption-area,
+#main .att.image.graduationflyer .caption-area a,
+#main .news .caption-area,
+#main .news .caption-area a{
+    color:#888;
+}
+#main .news .caption-area a {
+    text-decoration:none;
+    border-bottom:#888 solid 1px;
+}
+
+#main .upload .caption-area,
+#main .upload .caption-area a {
+    color:#00f;
+}
+
+#main .upload a {
+    border-bottom:#00f solid 1px;
+    text-decoration:none;
+}
+#main .graduationflyer.upload a {
+    border-bottom:#888 solid 1px;
+    text-decoration:none;
+}
+
+
+#main .upload .title a {
+    border-bottom:#00f solid 2px;
+    text-decoration:none;
+}
+
+
+/* Search */
+
+
+.bmarg {
+	margin-bottom:5px;
+}
+
+#result .title {
+    float:none;
+    clear:both;
+}
+
+#currentlocalisation {
+    display:none;
+}
+
+#baseurl {
+    display:none;
+}
+
+#result h1 {
+    margin-top:40px;
+    margin-bottom:0px;
+    text-align:left;
+}
+
+#result #uResult,
+#result #pResult,
+#result #nResult,
+#result #gResult {
+    margin-left:50px;
+}
+
+#language {
+	margin-right:10px;
+}
+
+#search {
+	margin-bottom:20px;
+	margin-right:20px;
+
+	text-align:right;
+	font-size:12px;
+	line-height:16px;
+	font-family:sans-serif;
+}
+
+#search a {
+	margin-right:10px;
+}
+
+#search input[type=text] {
+	width:100px;
+}
+
+#search input[type=submit] {
+	margin-left:4px;
+}
+
+#main #result {
+    margin-right:40px;
+}
+
+
+.upload-login {
+	width:400px;
+}
+
+/* blocks */
+
+.block {
+	display:inline;
+	float:left;
+
+        margin-top:18px;
+	margin-right:25px;
+	margin-bottom:10px;
+      
+}
+
+.fixed :first-child {
+    margin-top:0px;
+
+}
+
+.fixed .block {
+    margin-right:0px;
+}
+
+
+.intro {
+	width:500px;
+	display:inline;
+	margin-bottom:18px;
+}
+
+.block.w1 {
+	width:200px;
+}
+
+
+.block.w2 {
+	width:200px;
+}
+
+.block.w3 {
+	width:300px;
+}
+
+.block.w4 {
+	width:400px;
+}
+
+.block.w5 {
+	width:460px;
+}
+
+.block.w6 {
+	width:600px;
+}
+
+.block.w7 {
+	width:700px;
+}
+
+.block.wfull {
+	width:740px;
+}
+
+.r {
+	float:right;
+}
+
+.l {
+	float:left;
+}
+
+
+.block.m1 {
+	margin-top:36px;
+}
+
+.block.m2 {
+	margin-top:72px;
+}
+
+
+.cl {
+	clear:left;
+}
+
+.cr {
+	clear:right;
+}
+
+.cb {
+	clear:both;
+}
+
+
+
+
+.block.l1 {
+	margin-left:50px;
+}
+
+.block.l2 {
+	margin-left:100px;
+}
+
+.block.l3 {
+	margin-left:150px;
+}
+
+.block.l4 {
+	margin-left:150px;
+}
+
+.block.l5 {
+	margin-left:200px;
+}
+
+.block.l6 {
+	margin-left:250px;
+}
+
+
+.block.r1 {
+	margin-right:50px;
+}
+
+.block.r2 {
+	margin-right:100px;
+}
+
+.block.r3 {
+	margin-right:150px;
+}
+
+.block.r4 {
+	margin-right:150px;
+}
+
+.block.r5 {
+	margin-right:200px;
+}
+
+.block.r6 {
+	margin-right:250px;
+}
+
+
+/* rblock, grad-projcts, projects*/
+
+.frontpage .block,
+.rblock {
+    float:right;
+    margin:0px 40px 40px 30px
+}
+
+.frontpage .block,
+.project .rblock {
+    max-width:280px;
+    clear:right;
+}
+
+#news h1,
+.project h1 {
+    font-family:sans-serif;
+    font-size:12px;
+    line-height:18px;
+    font-weight:bold;
+    text-align:left;
+    margin-top:0px;
+    margin-bottom:2px;
+    color:#00f;
+}
+
+
+
+.project p {
+    color:#00f;
+}
+
+.personpage .block.first {
+    display:none;
+}
+
+
+ #userItemInfo .jumpmenu {
+    display:none;
+}
+
+#userItemInfo {
+    clear:both;
+}
+
+#userItemInfo .fixed .uploads.filter {
+    margin-top:0px;
+}
+
+/* Factbox */
+
+.highlight-square {
+	margin:9px;
+	background-color:#FFFF99;
+	float:right;
+	padding:9px;
+	width:auto;
+	font-family:monospace;
+	font-size:11px;
+	line-height:18px;
+}
+
+.highlight-square a {
+	color:#000;
+	text-decoration:none;
+	border-bottom:1px solid #000;
+}
+
+/* Admin Menu */
+
+
+#adminmenu ul {
+    margin:0;
+    padding:0;
+    list-style-type: none;
+
+}
+
+#adminmenu ul li {
+    margin:0;
+    padding:0;
+    list-style-type: none;
+}
+
+
+
+
+#menu #adminmenu a:hover {
+	border-bottom:1px solid #00f;
+}
+
+
+/* Menu */
+
+
+
+#menu a {
+	color:#000;
+	text-decoration:none;
+}
+
+#menu a:hover {
+	border-bottom:1px solid #000;
+}
+
+#menu .section.margins {
+
+    margin-bottom:12px;
+}
+
+.menuitem.section.home {
+    margin-top:2px;
+    margin-bottom:10px;
+}
+
+#menu .menuitem.sep {
+    margin-top:12px
+}
+
+
+#menu .current a {
+	font-weight:bold;
+}
+
+
+/* fix */
+
+#main a.allprojects {
+	font-family:sans-serif;
+	font-weight:bold;
+	border-bottom:2px solid #00f;
+}
+
+.edit {
+    display:none;
+}
+
+#main .file {
+    max-width:185px;
+}
+
+
+
+#main .link,
+#main .deadline,
+#main .file,
+#main .factbox {
+	padding:12px 16px;
+        font-size:11px;
+	line-height:16px;
+	font-family:monospace;
+
+}
+
+#main .file {
+    background-color:#feffa4;
+}
+
+#main .link {
+    background-color:#c1d7ff;
+}
+
+#main .deadline {
+    background-color:#fff;
+    border:2px solid #f00;
+    color:#f00;
+    font-weight:bold;
+}
+
+
+#main .file,
+#main .deadline,
+#main .link {
+    margin:25px 15px 15px 15px;
+}
+
+#main .deadline,
+#main .file {
+    float:right;
+    clear:right;
+}
+
+#main .link {
+    float:left;
+    clear:left;
+}
+
+
+#main .file a,
+#main .link a,
+#main .factbox a {
+	color:#000;
+	text-decoration:none;
+	border-bottom:1px solid #000;
+}
+
+#main .deadline a {
+	color:#f00;
+	text-decoration:none;
+	border-bottom:1px solid #f00;
+
+}
+
+
+
+/* uploads on fixed */
+
+.fixed .uploads.filter {
+	float:left;
+	clear:both;
+        width:720px;
+	margin-top:30px;
+}
+
+.uploads.filter {
+	
+	
+}
+
+.itemFilterContent {
+    float:left;
+}
+
+.uploads img{
+	display:block;
+        
+}
+
+.uploads embed {
+    display:block;
+}
+
+#playbutton {
+    display:none;
+}
+
+.playbutton {
+    position:relative;
+    width:0px;
+    height:0px;
+    overflow:visible;
+    float:none;
+    z-index:1000;
+    
+
+}
+
+.project .uploads .att.text .icon {
+    border:2px solid #00f;
+}
+
+
+.caption-area {
+	margin-top:5px;
+	clear:left;
+	float:left;
+
+}
+
+.collapsed {
+	display:none;
+}
+
+.uploads-login,
+.uploads-login a,
+.att,
+.att a {
+	font-family:sans-serif;
+	font-size:12px;
+	line-height:18px;
+}
+
+.att.upload,
+.att.upload a {
+    color:#00f;
+}
+
+#news .rblock p,
+#news h1,
+.att.news,
+.att.news a {
+    color:#999;
+}
+
+
+
+.uploads-login .login-note {
+    margin-bottom:3px;
+}
+
+.att .by {
+	float:right;
+	margin-bottom:5px;
+
+}
+
+.att .title {
+	float:left;
+	margin-right:10px;
+}
+
+.att .title .timeago {
+	font-weight:normal;
+}
+
+.att .title {
+    font-weight:bold;
+}
+
+.att.news .title .readmore {
+    font-weight:normal;
+    border-bottom:1px solid #888;
+}
+
+.att .description {
+	float:left;
+	margin-top:2px;
+
+	clear:both;
+}
+
+.att {
+	float:left;
+	display:inline;
+	padding:0px 25px 35px 0px;
+}
+
+
+.ed-img {
+	margin:0px;
+	padding:20px 0px 20px 0px;
+	text-align:center;
+
+	clear:both;
+}
+
+/* home page */
+
+.newstitle {
+    font-weight:bold;
+    color:#888;
+}
+
+.intro {
+	font-size:13px;
+	line-height:16px;
+}
+
+/* people */
+
+.block.people {
+    margin-right:10px;
+    display:inline;
+    
+}
+
+.people {
+        display:inline;
+        
+	font-family:monospace;
+	font-size:11px;
+	line-height:16px;
+
+	clear:both;
+	padding-top:25px;
+	margin:0px;
+	float:left;
+
+}
+
+.people .title {
+	margin:0px 0px 5px 15px;
+        text-decoration:underline;
+}
+
+
+.person {
+    float:left;
+    clear:left;
+    display:inline;
+    width:165px;
+}
+
+
+
+#main .person a {
+	color:#000;
+	border-bottom:1px solid #000;
+}
+
+.people.padded {
+    padding-right:190px;
+    padding-left:180px;
+}
+
+.col {
+	margin-right:15px;
+	width:165px;
+        float:left;
+}
+
+
+
+
+
+/* Administrators */
+
+.item {
+    margin-top:10px;
+    padding-top:10px;
+    border-top:1px solid #000;
+}
+
+#main .hide-blocks .block {
+    display:none;
+}
+
+
+.admin {
+    border:solid #00f 8px;
+    position:absolute;
+    top:100px;
+    left:60px;
+    background-color:#fff;
+    display:none;
+    z-index:2000;
+}
+
+.admin iframe {
+    min-height:300px;
+}
+
+/* graduations */
+#main .links-right .link {
+    float:right;
+    clear:right;
+
+}
+
+.graduation h1 {
+    clear:both;
+    text-align:left;
+}
+
+.gradfilters {
+        float:right;
+    	font-size:12px;
+	line-height:16px;
+	font-family:sans-serif;
+        margin-bottom:30px;
+
+}
+
+#main .oldgraduations-factbox {
+    clear:both;
+    float:right;
+    margin-right:18px;
+    width:172px;
+}
+
+#main .file.grad-oldprojects {
+    float:left;
+    clear:left;
+    margin:10px 15px 35px 10px;
+}
+
+.gradfilters .selected {
+        font-weight:bold;
+}
+
+#main ul.grad-years li {
+    margin-right:18px;
+    width:30px;
+}
+
+
+#main ul.grad-categories li {
+    margin-right:15px;
+    margin-left:10px;
+    width:160px;
+}
+
+#main ul.grad-people li {
+    font-family:monospace;
+    font-size:11px;
+    line-height:14px;
+    margin-right:5px;
+    width:130px;
+}
+
+
+#main .gradfilters a {
+    color:#000;
+    text-decoration:none;
+    border-bottom:1px solid #000;
+}
+
+.gradfilters ul {
+    float:right;
+    margin:0px;
+    padding:0px;
+}
+
+.gradfilters ul li {
+    list-style-type:none;
+    margin:0px;
+}
+
+.gradfilters ul.grad-people {
+    margin:0px 10px;
+}
+
+.filter .att.filtered_user .icon {
+	border:0px solid #00f;
+}
+
+.filter .graduationflyer.att.filtered_category .icon {
+	border:4px solid #888;
+}
+
+.filter .att.filtered_category .icon {
+	border:4px solid #00f;
+}
+
+.graduation-top {
+    text-align:left;
+    width:350px;
+    float:left;
+    margin-right:100px;
+
+}
+
+.graduation-text {
+    width:450px;
+    margin-bottom:15px;
+    float:left;
+    clear:left;
+    
+}
+
+.graduation-top h1 {
+    text-align:left;
+    float:left;
+    
+}
+
+.graduate .uploads.filter {
+    clear:both;
+}
+
+.graduate .caption-area .title {
+    display:none;
+}
+.graduate .caption-area .description {
+    display:block;
+
+}
+.graduate .caption-area .by {
+    display:block;
+}
+
+
+/* layout specific */
+
+.more {
+    width:350px;
+    clear:both;
+    margin:0 auto;
+}
+
+.more hr {
+    margin-top:50px;
+    border:0;
+    border-top:3px solid #00f;
+}
+
+.more p {
+    text-align:center;
+
+    font-size:12px;
+    line-height:16px;
+    font-family:sans-serif;
+    font-weight:bold;
+}
+
+#fetchStatus {
+    color:#ccc;
+    margin-top:15px;
+}
+
+#main .more a {
+    color:#00f;
+    text-decoration:none;
+    border-bottom:2px solid #00f;
+}
+
+/* per page css: */
+
+.googlemap iframe {
+	margin:0px auto;
+	padding:20px 0px 8px 30px;
+	text-align:center;
+
+	clear:both;
+}
+
+.googlemap small {
+	font-family:sans-serif;
+	font-size:12px;
+        line-height:16px;
+        margin-top:6px;
+        text-align:center;
+        margin-left:30px;
+
+}
+
+
+#main .projects .block,
+#main .projects .jumpmenu {
+    display:none;
+}
+
+#main .apply .jumpmenu {
+    display:none;
+
+}
+
+#main .apply ol {
+    margin:20px 0px;
+    padding:0px;
+}
+
+#main .apply li {
+    list-style-type:decimal;
+}
+#main .apply ol li {
+
+    display:inline;
+    margin:0;
+    padding:10px;
+}
+
+#main .frontpage .block h1,
+#main .frontpage .jumpmenu {
+    display:none;
+}
+
+#main .graduation .jumpmenu {
+    display:none;
+}
+
+#main .graduation .block {
+    display:none;
+}
+
+#main .about img {
+    margin:20px 0px;
+}
+
+#main .about .jumpmenu {
+    display:none;
+}
+
+#main .workshops .block {
+    margin-top:0px;
+    padding-top:0px;
+
+    clear:both;
+
+}
+
+#main .workshops .block.first {
+    clear:none;
+}
+
+#main .workshops .link {
+    margin:2px 10px 10px 0px;
+}
+
+#main .workshops .ed-img {
+    padding-bottom:45px;
+    padding-top:10px;
+}
+
+
+
+.simple {
+    margin-bottom:10px;
+}
+
+#everythinglisted ul {margin:0;}
+#everythinglisted ul, #everythinglisted li { list-style:none;  }
+#everythinglisted .menu li { list-style:none; float:left; margin: 10px;}
+.pagnation {margin-top:15px;}
+div.tab li { border-bottom:2px solid #000; margin:6px 0 0 0;}
+.tabm { text-decoration: none; color:#000;}
+a.sel { text-decoration: underline;}
+.grid {width:130px;display:inline-block;overflow:hidden;height:22px}
+.grid2{width:170px;}
+.grids{width:60px;}
+
+/* >> The Magnificent CLEARFIX: Updated to prevent margin-collapsing on child elements << j.mp/bestclearfix */
+.clearfix:before, .clearfix:after {
+  content: "\0020"; display: block; height: 0; visibility: hidden;
+}
+
+.clearfix:after { clear: both; }
+/* Fix clearfix: blueprintcss.lighthouseapp.com/projects/15318/tickets/5-extra-margin-padding-bottom-of-page */
+.clearfix { zoom: 1; }
+
+#everythinglisted ul.yiiPager a:link, #everythinglisted ul.yiiPager a:visited {
+    border:none;
+}
+div.tab .pagnation li {border:none;}

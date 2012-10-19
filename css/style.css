@@ -1,0 +1,337 @@
+/*****************/
+/*
+/* Admin dialog
+/*
+/****************/
+
+.cr {
+    clear:right;
+}
+
+#admin h2 {
+    line-height:1.09em;
+}
+#admin h5 {
+    font-size:1.2em;
+    margin:.2em 0 0 0;
+}
+
+#admindialog {
+    background:#fff;
+}
+
+#admindialog h3 {
+    padding:0.5em;
+    margin:0;
+}
+
+.wide {
+
+}
+
+.narrow {
+
+}
+
+#item{
+    overflow:hidden;
+}
+
+#adminwrapper {
+
+    margin:0px;
+
+    padding:15px;
+}
+
+#attachment {
+    margin-top:1em;
+}
+
+#confirm {
+    display:none;
+}
+
+.theupload{
+    margin-bottom:1em;
+}
+
+.uploadtype {
+    float: left; line-height: 1em;
+    padding: .2em .5em 0 .5em;
+}
+
+.attchhead {
+    padding:.2em 0;
+    display:inline-block;
+    width:100%;
+}
+
+.upload{
+    overflow:hidden;
+    display:inline-block;
+    width:100%;
+    margin-bottom:1em;
+}
+
+ul.tab{
+    list-style-image:none;
+    list-style-position:outside;
+    list-style-type:square;
+    margin:0 0 1.5em 0;
+    padding:0;
+}
+
+ul.tab li{
+    float:left;
+    list-style-type:none;
+    text-align:center;
+    margin-left:0;
+}
+
+.tab li.last{ float:right;}
+
+.tab li.last a{ padding:0; }
+
+.tab a {
+    color:#000000;
+    display:block;
+    float:left;
+    line-height:16px;
+    font-size:12px;
+    
+    text-decoration:none;
+    border-bottom:1px solid #000;
+}
+
+
+.tabwin { overflow:hidden;}
+
+.addupload{ margin-top:1em; }
+
+.half{
+    float:left;
+    width:460px;
+    margin-right: 10px;
+}
+
+.halfend{
+    float:left;
+    width:470px;
+}
+
+.split{width:48%;}
+
+.split3 { width: 32%; }
+
+.fullwidth{width:100%;}
+
+.third {
+    float:left;
+    width:31%;
+    padding: 0 2em 0 0;
+}
+
+div.last { padding:0; margin:0;}
+
+
+.list{
+    overflow:auto;
+    height:150px;
+}
+
+.np_advanced { display:none;}
+.short form {width:250px; display:inline;}
+.long form {width:400px; display:inline;}
+.editmarkdown {
+    color: #0000FF; cursor:pointer; min-height:160px; height:auto;
+}
+* html .editmarkdown {
+    height: 160px;
+}
+
+.editmarkdown p { color: #0000FF;cursor:pointer; }
+.edit { color: #0000FF;cursor:pointer; }
+.generate { color:gray;}
+.simple { margin: 0.3em 0; }
+.datep { width:120px; }
+
+.addu { width:550px; }
+
+ul.addu{
+    list-style-image:none;
+    list-style-position:outside;
+    list-style-type:square;
+    margin:0;
+    padding:0;
+    width:550px;
+    overflow:hidden;
+}
+
+ul.addu li{
+    float:left;
+    list-style-type:none;
+    text-align:center;
+    margin-left:1em;
+}
+
+.addu a {
+    display:block;
+    float:left;
+    line-height:20px;
+    
+    font-size:18px;
+    text-decoration:none;
+    border-bottom:1px solid #00f;
+}
+
+.addu a.hidden {
+    display:none;
+}
+
+.ln{
+    margin:0;
+    padding:0;
+}
+
+
+.inp_title {
+    font-size: 1.9em;
+    color: #0000FF;
+    line-height: 1.09em;
+    font-family: sans-serif;
+    letter-spacing: 2px;
+    word-spacing: 0.1em;
+}
+.inp_text {
+    color: #0000FF;
+    line-height: 1.09em;
+    font-family: sans-serif;
+
+}
+
+#error {
+    font-size:1.2em;
+    color:red;
+    margin-bottom:.3em;
+    background:#ffa16d;
+    line-height:1.6em;
+    padding-left:.3em;
+}
+
+#success {
+    font-size:1.2em;
+    color:green;
+    margin-bottom:.3em;
+    background:#d3ffc6;
+    line-height:1.6em;
+    padding-left:.3em;
+}
+
+.defaultText { width: 450px; }
+.defaultTextTitleActive { color: #8f8dff;  }
+.defaultTextActive { color: #8f8dff;  }
+
+.inp_short {
+    width:320px;
+}
+
+a.black {
+    color:#000;
+}
+
+.ns {
+    white-space:nowrap;
+}
+
+.bigbut{
+    
+    height:35px;
+    font-size:16px;
+}
+.bigbut2{
+    
+    height:35px;
+    font-size:16px;
+    margin-bottom:5px;
+}
+.previewimage {
+    margin:0 5px 0 0;
+    color:red;
+}
+
+.saveclose {
+    margin-left:0px;
+}
+/*****************/
+/*
+/* Header
+/*
+/****************/
+
+#header{display:none;}
+
+/*****************/
+/*
+/* Navigation
+/*
+/****************/
+
+#navigation {
+    float:left;
+    width:160px;
+    margin-right:25px;
+
+}
+
+/*****************/
+/*
+/* Main content
+/*
+/****************/
+
+#content{
+    float:left;
+    width:450px;
+    margin-right:45px;
+}
+
+/*****************/
+/*
+/* User content
+/*
+/****************/
+
+#usercontent{
+    min-width:280px;
+    max-width:700px;
+    overflow:hidden;
+}
+
+/*****************/
+/*
+/* Footer
+/*
+/****************/
+
+#footer{}
+
+/*****************/
+/*
+/* calandar
+/*
+/****************/
+
+
+.datepicker { border-collapse: collapse; border: 2px solid #999; position: absolute; }
+.datepicker tr.controls th { height: 22px; font-size: 11px; }
+.datepicker select { font-size: 11px; }
+.datepicker tr.days th { height: 18px; }
+.datepicker tfoot td { height: 18px; text-align: center; text-transform: capitalize; }
+.datepicker th, .datepicker tfoot td { background: #eee; font: 10px/18px Verdana, Arial, Helvetica, sans-serif; }
+.datepicker th span, .datepicker tfoot td span { font-weight: bold; }
+
+.datepicker tbody td { width: 24px; height: 24px; border: 1px solid #ccc; font: 11px/22px Arial, Helvetica, sans-serif; text-align: center; background: #fff; }
+.datepicker tbody td.date { cursor: pointer; }
+.datepicker tbody td.date.over { background-color: #99ffff; }
+.datepicker tbody td.date.chosen { font-weight: bold; background-color: #ccffcc; }

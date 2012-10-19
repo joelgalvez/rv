@@ -1,0 +1,10 @@
+#main .deadline,
+#main .file {
+    max-width:185px;
+}
+
+
+.att .title .arrow {
+    font-family:serif;
+    font-size:14px;
+}
