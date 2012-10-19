@@ -48,7 +48,6 @@ return array(
 		'db'=>array(
 			 'connectionString'=>'mysql:host=localhost;dbname=GRAsite',
                         'username'=>'grasite',
-                        'password'=>'xxxx',
                         'emulatePrepare'=>true,
                         'charset' => 'utf8'
 
