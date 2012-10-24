@@ -1,6 +1,7 @@
 tmp/*
 nbproject/*
 .DS_Store
+Thumbs.db
 *.png
 /index.iis5.php
 /Iirf.ini
