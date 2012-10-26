@@ -82,22 +82,12 @@ class WebPageController extends CController{
                     Yii::app()->request->cookies['nlUrl'] = new CHttpCookie('nlUrl', '');
                 }
 
-//                if(Util::GetLocalization() == 1)
-//                {
-//                    $cookie = new CHttpCookie('nxtUrl', $item->friendlyUrlNl);
-//                    Yii::app()->request->cookies['nxtUrl'] = $cookie;
-//                }else
-//                {
-//                    $item->changeLocalization(true);
-//                    $cookie = new CHttpCookie('nxtUrl', $item->friendlyUrl);
-//                    Yii::app()->request->cookies['nxtUrl'] = $cookie;
-//                }
+                // Switch the fields of the item to the Dutch content if the user 
+                // is currently in the Dutch section.
                 if(Util::GetLocalization() == 2)
                 {
                     $item->changeLocalization(true);
                 }
-
-//                $item->changeLocalization(true);
 
                 if($item->templateId != null)
                 {
