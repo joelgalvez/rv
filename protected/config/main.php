@@ -1,5 +1,7 @@
 <?php
 
+$db = require(dirname(__FILE__) . '/db.php');
+
 // uncomment the following to define a path alias
 // Yii::setPathOfAlias('local','path/to/local-folder');
 
@@ -45,14 +47,7 @@ return array(
 		),
 		// uncomment the following to set up database
 
-		'db'=>array(
-			 'connectionString'=>'mysql:host=localhost;dbname=GRAsite',
-                        'username'=>'grasite',
-                        'password'=>'xxxx',
-                        'emulatePrepare'=>true,
-                        'charset' => 'utf8'
-
-		),
+		'db'=>$db,
 
         'authManager'=>array(
             'class'=>'CDbAuthManager',
