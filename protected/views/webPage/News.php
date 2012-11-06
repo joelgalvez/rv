@@ -1,3 +1,4 @@
+
 <?php
 
     $parser = new MarkdownParserHighslide();
@@ -8,18 +9,16 @@
     $big = 700;
     $filtered_category = false;
     $filtered_user = false;
+    $currentUser = Yii::app()->user;
 ?>
 
 <div id="news">
 
   
 
-    <?php echo CHtml::link("Edit",array('item/adminUpdate','id'=> $model->id)); ?>
-<?php if($model->editorId == Yii::app()->user->id): ?>
-    <?php endif; ?>
-            <div class="edit">
-                <?php echo CHtml::link("Edit",array('item/adminUpdate','id'=> $model->id), array('class'=>'editbutton wide')); ?>
-            </div>
+  <?php if(!$currentUser->isGuest && ($currentUser == $model->editorId || $currentUser->groupId == 2)): ?>
+    <?php echo CHtml::link("Edit news",array('item/adminUpdate','id'=> $model->id), array('class'=>'openadmin wide editpage')); ?>
+  <?php endif; ?>
 
 
         <!--
@@ -35,7 +34,7 @@
 		$cnt = 0;
 		foreach($model->itemuploads as $i=>$upload):
 	?>
-        
+
 	    <?php
 	        echo $this->renderPartial('upload/'.$upload->type, array(
 	            'upload'=>$upload,
@@ -46,7 +45,7 @@
                     'big'=>$big,
                     'filtered_category'=>$filtered_category,
                     'filtered_user'=>$filtered_user,
-	                'parser'=>new MarkdownParserHighslide,
+	            'parser'=>new MarkdownParserHighslide,
                     'editorial'=>false,
                     'lbound'=>300,
                     'hbound'=>300,
@@ -59,9 +58,8 @@
 
 	<?php
             $cnt++;
-            
-            break; //hack - there are several uploads returned - only show the first
 
+            break; //hack - there are several uploads returned - only show the first
 
             endforeach;
 	?>
