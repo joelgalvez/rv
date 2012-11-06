@@ -35,7 +35,7 @@
 		$cnt = 0;
 		foreach($model->itemuploads as $i=>$upload):
 	?>
-
+        
 	    <?php
 	        echo $this->renderPartial('upload/'.$upload->type, array(
 	            'upload'=>$upload,
@@ -46,7 +46,7 @@
                     'big'=>$big,
                     'filtered_category'=>$filtered_category,
                     'filtered_user'=>$filtered_user,
-	            'parser'=>new MarkdownParserHighslide,
+	                'parser'=>new MarkdownParserHighslide,
                     'editorial'=>false,
                     'lbound'=>300,
                     'hbound'=>300,
@@ -59,6 +59,10 @@
 
 	<?php
             $cnt++;
+            
+            break; //hack - there are several uploads returned - only show the first
+
+
             endforeach;
 	?>
 </div>
