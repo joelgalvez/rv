@@ -8,3 +8,4 @@ assets/*
 /Iirf.ini
 /protected/config/db.php
 Thumbs.db
+/protected/runtime/*
