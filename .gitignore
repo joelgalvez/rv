@@ -6,4 +6,5 @@ assets/*
 /index.iis5.php
 /Iirf.ini
 /protected/config/db.php
+/protected/runtime/*
 Thumbs.db
