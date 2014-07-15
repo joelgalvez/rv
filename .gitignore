@@ -4,3 +4,5 @@ nbproject/*
 assets/*
 .DS_Store
 *.png
+/index.iis5.php
+/Iirf.ini
