@@ -25,13 +25,8 @@ class VideometaController extends CController {
     //POST -> http://localhost/en/markdown/getMarkup
     public function actionGetMeta()
     {
-        if(isset($_POST['url']) )
-
-        {
-            echo $this->getVideometa($_POST['url']);
-        }else if(isset($_GET['url']) )
-        {
-            echo $this->getVideometa($_GET['url']);
+        if(isset($_REQUEST['url'])){
+            echo $this->getVideometa($_REQUEST['url']);
         }
 
     }
