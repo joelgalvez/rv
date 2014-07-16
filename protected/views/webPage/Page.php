@@ -336,6 +336,7 @@ if($filtered_user || $filtered_category) {
 </div>
 
     <!-- <a href="#i=0" id="prevLink" style="display:none">Less</a> -->
+ <script type="text/javascript" src="/gradvid/gradtest.js"></script>
 
 
 <?php endif; ?>
