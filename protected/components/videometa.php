@@ -1,6 +1,14 @@
 <?php
 error_reporting(-1);
 
+/**
+ * This class seems to be a duplicate or predecessor of MetaVideo. In any case:
+ * it doesn't seem to be in use (a search for it in the codebase shows no usage).
+ * So we probably can delete it some time.
+ *
+ * @deprecated
+ * @see MetaVideo
+ */
 class videometa {
 
 
