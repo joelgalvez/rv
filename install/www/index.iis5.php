@@ -24,7 +24,7 @@ if (isset($requestParts['query'])){
 $queryParts = explode('&', $_SERVER["QUERY_STRING"]);
 $_GET = array();
 foreach ($queryParts as $i=>$part){
-  list($name, $value) = explode('=', $part);
+  list($name, $value) = explode('=', $part . '='); // The added = is there in case the part doesn't contain an = (ie. an empty/flag parameter).
   $_GET[$name] = $value;
 }
 
