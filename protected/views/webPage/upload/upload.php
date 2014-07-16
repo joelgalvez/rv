@@ -52,7 +52,7 @@ if (!isset($filtered_year)) {
     $filtered_year = false;
 }
 
-$fn = Yii::app()->request->baseUrl . $upload->filePath . $upload->fileName;
+$filename = Yii::app()->request->baseUrl . $upload->filePath . $upload->fileName;
 
 //$sizes = array(50 => '',150 => '',200 => '',250 => '',300 => '',400 => '',500 => '',600 => '', 650=> '',700 => '',740 => '');
 $sizes = Yii::app()->params['imageSize'];
@@ -77,9 +77,9 @@ $size = 0;
 if ($upload->uploadtype != 3) {
 
 
-    $rpos = stripos(strrev($fn), '/');
-    $fn1 = substr($fn, strlen($fn) - $rpos, $rpos);
-    $fn2 = substr($fn, 0, strlen($fn) - $rpos);
+    $rpos = stripos(strrev($filename), '/');
+    $fn1 = substr($filename, strlen($filename) - $rpos, $rpos);
+    $fn2 = substr($filename, 0, strlen($filename) - $rpos);
 
     //filenames for each size
     foreach ($sizes as $s => $tfn) {
@@ -87,9 +87,9 @@ if ($upload->uploadtype != 3) {
     }
 
     //If .GIF or video then always use original (resize client side)
-    if ($upload->uploadtype == 2 || strtolower(substr($fn, strlen($fn) - 3, 3)) == "gif") {
+    if ($upload->uploadtype == 2 || strtolower(substr($filename, strlen($filename) - 3, 3)) == "gif") {
         foreach ($sizes as $s => $tfn) {
-            $sizes[$s] = $fn;
+            $sizes[$s] = $filename;
         }
     }
 
@@ -103,7 +103,7 @@ if ($upload->uploadtype != 3) {
     }
 
     if ($size < end(array_keys($sizes))) {
-        $sizes[$size] = $fn;
+        $sizes[$size] = $filename;
     }
 
     foreach ($sizes as $s => $tfn) {
@@ -111,7 +111,7 @@ if ($upload->uploadtype != 3) {
             unset($sizes[$s]);
         }
         if ($s == $size) {
-            $sizes[$s] = $fn;
+            $sizes[$s] = $filename;
         }
     }
 }
@@ -227,7 +227,7 @@ $project_title = "<a class =\"more\" href=\"" . $project_url . "\">" . $upload->
         }
         ?>
 
-		<div id="att<?php echo $upload->id;?>" class="att image uninitialized<?php echo $graduationflyer ? " graduationflyer" : ""; ?> <?php echo $type?> <?php if($filtered_category) {echo ' filtered_category';}?> <?php if($filtered_user) {echo ' filtered_user';}?>">
+        <div id="att<?php echo $upload->id;?>" class="att image uninitialized<?php echo $graduationflyer ? " graduationflyer" : ""; ?> <?php echo $type?> <?php if($filtered_category) {echo ' filtered_category';}?> <?php if($filtered_user) {echo ' filtered_user';}?>">
             <div class="icon">
                 <p style="text-indent: 0px;">
                     <?php if ($graduationflyer): ?>
@@ -324,62 +324,45 @@ $project_title = "<a class =\"more\" href=\"" . $project_url . "\">" . $upload->
 
     <?php // VIDEO  ?>
 <?php elseif ($upload->uploadtype == 2): ?>
-    <?php // $m = new MetaVideo($upload->videolink, false);  ?>
     <?php
-    list($tnw, $tnh) = Util::calculateSize($small, $upload->imageWidth, $upload->imageHeight);
-    list($w, $h) = Util::calculateSize($big, $upload->imageWidth, $upload->imageHeight);
-    //echo "<pre>";
-    //echo "w $m->width h $m->height";
-    //echo "</pre>";
 
-    $fn = $upload->videolink;
-
-    $id = -1;
-
-    if (strstr($fn, "youtube")) {
-        $fn = parse_url($fn);
-        parse_str($fn['query']);
-        $id = $v; //7KdMiRUbHi0
-        $fn = 'youtube' . $id . '.jpg';
-    } elseif (strstr($fn, "vimeo")) {
-        $spos = strripos($fn, "/");
-        $id = intval(substr($fn, $spos + 1));
-        $fn = 'vimeo' . $id . '.jpg';
-    }
-
+    // Determine type and id of the video and the dimensions of the thumbnail.
+    $video           = new MetaVideo($upload->videolink);
+    list($tnw, $tnh) = Util::calculateSize($small, $video->width, $video->height);
+    list($w, $h)     = Util::calculateSize($big, $video->width, $video->height);
 
     ?>
-	<div id="att<?php echo $upload->id;?>" class="att video uninitialized <?php echo $type?>  <?php if($filtered_category) {echo ' filtered_category';}?> <?php if($filtered_user) {echo ' filtered_user';}?>">
+    <div id="att<?php echo $upload->id;?>" class="att video uninitialized <?php echo $type; ?>  <?php if($filtered_category) {echo ' filtered_category';}?> <?php if($filtered_user) {echo ' filtered_user';}?>">
         <div class="icon">
             <div class="videotn">
                     <div class="playbutton"><img src="<?php echo Yii::app()->request->baseUrl; ?>/images/play.png" alt="" /></div>
-                    <img src="<?php echo Yii::app()->request->baseUrl .Yii::app()->params['thumbFolder']. $fn; ?>" width="<?php echo $tnw; ?>" height="<?php echo $tnh; ?>" alt="" />
+                    <img src="<?php echo $video->tn; ?>" width="<?php echo $tnw; ?>" height="<?php echo $tnh; ?>" alt="" />
                 </div>
             <div class="video" style="display:none">
                 <!-- id <?php echo $upload->id; ?> -->
 
-                <?php if (strstr($upload->videolink, "youtube")): ?>
+                <?php if ($video->type == "youtube") : ?>
                     <?php if ($ie) { ?>
                         <object width="<?php echo $w ?>" height="<?php echo $h ?>">
-                            <param name="movie" value="http://www.youtube-nocookie.com/v/<?php echo $id; ?>'&hl=en&fs=1&rel=0" />
+                            <param name="movie" value="http://www.youtube-nocookie.com/v/<?php echo $video->id; ?>'&hl=en&fs=1&rel=0" />
                             <param name="allowFullScreen" value="true"/>
                             <param name="allowscriptaccess" value="always"/>
-                            <embed src="http://www.youtube-nocookie.com/v/<?php echo $id; ?>" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="<?php echo $w ?>" height="<?php echo $h ?>" />
+                            <embed src="http://www.youtube-nocookie.com/v/<?php echo $video->id; ?>" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="<?php echo $w ?>" height="<?php echo $h ?>" />
                         </object>
                     <?php } else { ?>
-                        <embed src="http://www.youtube-nocookie.com/v/<?php echo $id; ?>&hl=en&fs=1&rel=0" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="<?php echo $w ?>" height="<?php echo $h ?>" />
+                        <embed src="http://www.youtube-nocookie.com/v/<?php echo $video->id; ?>&hl=en&fs=1&rel=0" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="<?php echo $w ?>" height="<?php echo $h ?>" />
                     <?php } ?>
-                <?php elseif (strstr($upload->videolink, "vimeo")): ?>
-                    <?php if ($ie) { ?>
+                <?php elseif ($video->type == "vimeo") : ?>
+                    <?php if ($ie) : ?>
                         <object width="<?php echo $w ?>" height="<?php echo $h ?>">
                             <param name="allowfullscreen" value="true"/>
                             <param name="allowscriptaccess" value="always"/>
-                            <param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=<?php echo $id; ?>&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" />
-                            <embed src="http://vimeo.com/moogaloop.swf?clip_id=<?php echo $id; ?>&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="<?php echo $w ?>" height="<?php echo $h ?>" />
+                            <param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=<?php echo $video->id; ?>&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" />
+                            <embed src="http://vimeo.com/moogaloop.swf?clip_id=<?php echo $video->id; ?>&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="<?php echo $w ?>" height="<?php echo $h ?>" />
                         </object>
-                    <?php } else { ?>
-                        <embed src="http://vimeo.com/moogaloop.swf?clip_id=<?php echo $id; ?>&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="<?php echo $w ?>" height="<?php echo $h ?>" />
-                    <?php } ?>
+                    <?php else : ?>
+                        <embed src="http://vimeo.com/moogaloop.swf?clip_id=<?php echo $video->id; ?>&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="<?php echo $w ?>" height="<?php echo $h ?>" />
+                    <?php endif; ?>
                 <?php endif; ?>
             </div>
         </div>
