@@ -58,8 +58,8 @@ class WebPage extends CModel {
 
             $criteria = new CDbCriteria;
 
-            $criteria->condition = "$fieldName =:name";
-            $criteria->params = array(':name'=>$itemName);
+            $criteria->condition = "$fieldName =:name"; // Should be "$fieldName =:name AND namespaceId = :ns"
+            $criteria->params = array(':name'=>$itemName); // Should be array(':name'=>$itemName, ':ns'=>$ns)
 
             $item = $model->find($criteria);
         }
@@ -71,6 +71,18 @@ class WebPage extends CModel {
         if($item)
         {
             $item->localizationId = $localizationId;
+            // DIRTY FIX: This code sets the reference to $upload->item to the
+            // current $item, instead of the record that was retrieved from the
+            // database in a second call (while resolving relations). These
+            // records are not the exact same object. Changes to the $item will
+            // not be reflected in $upload->item. During the change for localization
+            // this is actually needed.
+            // Why it this fix dirty? Because it only handles the item -> upload
+            // relation, while this should be done at the ActiveRecord level (through
+            // caching pointers to the same db record). For all relations in the system.
+            foreach ($item->itemuploads as $u=>$upload){
+              $upload->item = $item;
+            }
         }
 
         return $item;
