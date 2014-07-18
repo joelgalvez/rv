@@ -1332,120 +1332,118 @@ if(!DetectFlashVer(9, 0, 24)) {
             });
         },
 
-        initVideoUrl : function(inp,nr, ln) {
+        initVideoUrl: function (inp, nr, ln) {
 
-            $(inp).data('oldtag','---')
-            $(inp).data('oldid','---')
+            $(inp).data('oldtag', '---')
+            $(inp).data('oldid', '---')
             var pos = nr;
             var _ln = ln;
 
 
-            $(inp).bind("keyup", function(e){
-                
+            $(inp).bind("keyup", function (e) {
+
                 var that = this;
                 var tag = $(this).val();
                 var __ln = _ln;
 
-                if( tag == '')
+                if (tag == '')
                     return;
 
                 thumbnail = null;
-                if(__ln == 1)
-                {
-                    tthis = $('#uploadFile'+pos+'_preview');
-                    $('#ItemUpload_' +nr+ '_filePath').val(tag);
+                if (__ln == 1) {
+                    tthis = $('#uploadFile' + pos + '_preview');
+                    $('#ItemUpload_' + nr + '_filePath').val(tag);
                 }
-                else
-                {
-                    tthis = $('#uploadFile'+pos+'_preview_nl');
-                    $('#ItemUpload_' +nr+ '_filePathNl').val(tag);
+                else {
+                    tthis = $('#uploadFile' + pos + '_preview_nl');
+                    $('#ItemUpload_' + nr + '_filePathNl').val(tag);
                 }
 
 
-                if (tag.trim()=='')
+                if (tag.trim() == '')
                     return;
 
                 var _pos = pos;
 
-              
-                if(tag != $(this).data('oldtag')) {
 
-			$.getJSON(appName+"videoMeta/getMeta?url="+tag, null, function(data, textStatus) {
-                                _tId = (__ln == 1)? '' : '_nl';
-                                tId = (__ln == 1)? '' : 'Nl';
-                                
-				if(textStatus == "success" && data['status'] == "ok" && data['tn'] != "") {
+                if (tag != $(this).data('oldtag')) {
 
-					if(data['id'] != $(that).data('oldid')) {
+                    $.getJSON(appName + "videoMeta/getMeta?url=" + tag, null, function (data, textStatus) {
+                        _tId = (__ln == 1) ? '' : '_nl';
+                        tId = (__ln == 1) ? '' : 'Nl';
 
-                                                var thumbnail = $('#videourl_tn_'+_pos + _tId);
-						if(thumbnail) {
-							thumbnail.remove();
-							thumbnail = null;
-						}
+                        $("#error").empty();
+                        $("#success").empty();
 
-						thumbnail = $('<div></div>').attr('id', 'videourl_tn_'+_pos + _tId);
-						$('#uploadFile'+_pos+'_preview' + _tId).append(thumbnail);
-                                                $("#uploadFile"+_pos+"_preview" + _tId).removeClass("hidden")
-                                                $("#uploadFile"+_pos).hide();
+                        if (textStatus == "success" && data['status'] == "ok" && data['tn'] != "") {
 
-                                                thumbnail.html('<img width="125" id ="vpreview_'+ _pos + _tId +'" src="'+data['tn']+'">');
+                            if (data['id'] != $(that).data('oldid')) {
 
-                                                suf = '';
-                                                if(thumbnail.isIE()) {
-                                                    suf = '?r=' + Math.random();
-                                                }
+                                var thumbnail = $('#videourl_tn_' + _pos + _tId);
+                                if (thumbnail) {
+                                    thumbnail.remove();
+                                    thumbnail = null;
+                                }
 
-                                                var _img = $('#vpreview_'+ _pos + _tId )
+                                thumbnail = $('<div></div>').attr('id', 'videourl_tn_' + _pos + _tId);
+                                $('#uploadFile' + _pos + '_preview' + _tId).append(thumbnail);
+                                $("#uploadFile" + _pos + "_preview" + _tId).removeClass("hidden")
+                                $("#uploadFile" + _pos).hide();
 
-                                                _img
-                                                .attr('src', data['tn'] + suf)
-                                                .load(function(){
-                                                    thumbnail.html(_img);
+                                thumbnail.html('<img width="125" id ="vpreview_' + _pos + _tId + '" src="' + data['tn'] + '">');
 
-                                                }).bind('load', function(ev) {
-                                                    thumbnail.trigger('load', ev);
-                                                });
+                                suf = '';
+                                if (thumbnail.isIE()) {
+                                    suf = '?r=' + Math.random();
+                                }
 
-						thumbnail.bind('click', function() {
+                                var _img = $('#vpreview_' + _pos + _tId)
 
-							var html = '';
-							if(data['type'] == "youtube") {
-								html = '<object width="350"><param name="movie" value="http://www.youtube-nocookie.com/v/' + data['id'] + '&hl=en&fs=1&rel=0"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube-nocookie.com/v/' + data['id'] + '&hl=en&fs=1&rel=0" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="350"></embed></object>';
-							}
+                                _img
+                                    .attr('src', data['tn'] + suf)
+                                    .load(function () {
+                                        thumbnail.html(_img);
 
-							if(data['type'] == "vimeo") {
-								html = '<object width="350"><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=' + data['id'] + '&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" /><embed src="http://vimeo.com/moogaloop.swf?clip_id=' + data['id'] + '&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="350"></embed></object>';
-							}
+                                    }).bind('load', function (ev) {
+                                        thumbnail.trigger('load', ev);
+                                    });
 
-							$(this).html(html);
-						});
+                                thumbnail.bind('click', function () {
 
-                                                
-                                                if(data['width'] != -1 && data['height'] != -1) {
-                                                    $("#ItemUpload_"+_pos+"_imageWidth"+tId).val(data['width']);
-                                                    $("#ItemUpload_"+_pos+"_imageHeight"+tId).val(data['height']);
-                                                }
-					}
-				} else {
+                                    var html = '';
+                                    if (data['type'] == "youtube") {
+                                        html = '<object width="350"><param name="movie" value="http://www.youtube-nocookie.com/v/' + data['id'] + '&hl=en&fs=1&rel=0"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube-nocookie.com/v/' + data['id'] + '&hl=en&fs=1&rel=0" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="350"></embed></object>';
+                                    }
 
-					$('#videourl_tn_'+_pos + _tId).remove();
+                                    if (data['type'] == "vimeo") {
+                                        html = '<object width="350"><param name="allowfullscreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=' + data['id'] + '&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" /><embed src="http://vimeo.com/moogaloop.swf?clip_id=' + data['id'] + '&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="350"></embed></object>';
+                                    }
 
-                                        console.log(that)
-                                        $(that).val('');
-					oldid = "---";
-                                        $("#error").html("");
-                                        $("#success").html("");
-                                        $("#error").append("The video was not found");
-                                        location.href='#message';
-				}
+                                    $(this).html(html);
+                                });
 
-				oldtag = tag;
-			});
 
-		}
+                                if (data['width'] != -1 && data['height'] != -1) {
+                                    $("#ItemUpload_" + _pos + "_imageWidth" + tId).val(data['width']);
+                                    $("#ItemUpload_" + _pos + "_imageHeight" + tId).val(data['height']);
+                                }
+                            }
+                        } else {
+
+                            $('#videourl_tn_' + _pos + _tId).remove();
+
+                            console.log(that)
+                            $(that).val('');
+                            oldid = "---";
+                            $("#error").html("The video was not found.<br/>" + data['msg']);
+                            location.href = '#message';
+                        }
+
+                        oldtag = tag;
+                    });
+
+                }
             })
-
 
 
         },
