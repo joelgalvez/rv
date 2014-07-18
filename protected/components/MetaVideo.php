@@ -12,12 +12,12 @@ class MetaVideo {
     var $width = -1;
     var $height = -1;
     var $ratio = -1;
-    var $id = -1;
-    var $type = -1;
+    var $id = null;
+    var $type = null;
     var $url = '';
     var $path = '';
     var $here = 'none';
-
+    var $error = null;
 
     function MetaVideo($url) {
         // 1. Determine the type (youtube/vimeo) and id of the video.
@@ -26,15 +26,10 @@ class MetaVideo {
         $this->url = $url;
 
         // 1. Determine type and id.
-        if (strstr($this->url, "youtube")) {
-            $urlParts = parse_url($this->url);
-            parse_str($urlParts['query']);
-            $this->id   = $v;
-            $this->type = 'youtube';
-        } else if (strstr($this->url, "vimeo")) {
-            $spos       = strripos($this->url, "/");
-            $this->id   = intval(substr($this->url, $spos + 1));
-            $this->type = 'vimeo';
+        $this->determineTypeAndId();
+        if (!$this->id){
+            $this->err("Couldn't determine the video id. Please make sure it's a valid url.");
+            return;
         }
 
         // 2. Determine the thumbnail (and its dimensions) of this video.
@@ -55,7 +50,6 @@ class MetaVideo {
             $this->width  = $_img->getWidth();
             $this->height = $_img->getHeight();
             return;
-
         }
 
         // 2.2 Get the thumb from the video service.
@@ -65,6 +59,7 @@ class MetaVideo {
             $meta = json_decode(trim($meta));
             if ($meta == "") {
                 $this->err("Couldn't json_decode metadata");
+                return;
             }
 
             $this->tn = (array)$meta;
@@ -76,6 +71,7 @@ class MetaVideo {
 
             if (!Util::isValidURL($this->tn)) {
                 $this->err("Thumbnail don't have valid URL (" . $this->tn . ")");
+                return;
             }
 
             $this->width  = 480;
@@ -89,16 +85,19 @@ class MetaVideo {
 
             if ($meta == "a:0:{}") {
                 $this->err("Can't find metadata for video");
+                return;
             }
             $meta = unserialize(trim($meta));
             if ($meta == "") {
                 $this->err("Couldn't un-serialize metadata");
+                return;
             }
 
             $this->tn = $meta[0]['thumbnail_large'];
 
             if (!Util::isValidURL($this->tn)) {
                 $this->err("Thumbnail don't have valid URL (" . $this->tn . ")");
+                return;
             }
 
             $this->width  = $meta[0]['width'];
@@ -109,33 +108,91 @@ class MetaVideo {
 
         } else {
             $this->err("Don't seem like a video link");
+            return;
         }
 
         $this->saveImage();
     }
 
-    function youtubeid($url) {
-
-        $url = parse_url($url);
-        parse_str($url['query']);
-
-        return $v;
+    /**
+     * Sets this MetaVideo's type and id by evaluating/parsing its url.
+     */
+    private function determineTypeAndId(){
+        if (strstr($this->url, "youtube")) {
+            $this->type = "youtube";
+            $this->id   = $this->determineYoutubeId($this->url);
+        } else if (strstr($this->url, "vimeo")) {
+            $this->type = "vimeo";
+            $this->id   = $this->determineVimeoId($this->url);
+        } else {
+            $this->type = null;
+            $this->id   = null;
+        }
     }
 
+    /**
+     * Matches the url against Youtube url patterns and returns the video's ID
+     * from it.
+     *
+     * Can handle:
+     * - https://www.youtube.com/watch?v=VfzeA4gm3Ug (ID in query parameter 'v')
+     *
+     * @param string $url
+     *
+     * @return string
+     */
+    private function determineYoutubeId($url) {
+        // Parse the url. If it's not a url or doesn't contain a query, return null.
+        $urlParts = parse_url($url);
+        if (!$urlParts || !isset($urlParts['query'])){
+            return null;
+        }
+        // We expect the v=ID parameter in the youtube url. If it's there, return
+        // it. Otherwise return null.
+        parse_str($urlParts['query'], $parameters);
+        if (isset($parameters['v'])){
+            return $parameters['v'];
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * Matches the url against Vimeo url patterns and returns the video's ID
+     * from it.
+     *
+     * Can handle:
+     * - http://vimeo.com/98747766 (ID is the full path)
+     *
+     * @param string $url
+     *
+     * @return string
+     */
+    private function determineVimeoId($url){
+        $urlParts = parse_url($url);
+        if ($urlParts && isset($urlParts['path'])){
+            return str_replace('/', '', $urlParts['path']);
+        }else{
+            return null;
+        }
+    }
 
     function getmetadata($url) {
         $contents = @file_get_contents($url);
         if (!$contents) {
             $this->err("Can't get metadata (url: " . $url . ")");
         }
-
         return $contents;
     }
 
+    /**
+     * Store the given message and flag this MetaVideo as invalid. The error
+     * will be returned by render() (if called).
+     *
+     * @param $msg
+     */
     function err($msg) {
-        $arr = array('status' => 'error', 'msg' => $msg);
-        echo json_encode($arr);
-        die;
+        $this->error = array('status' => 'error', 'msg' => $msg);
     }
 
     function saveImage() {
@@ -145,12 +202,18 @@ class MetaVideo {
     }
 
     /**
-     * Returns this MetaVideo's properties, formatted as a JSON string.
+     * Returns this MetaVideo's properties, formatted as a JSON string. If this
+     * MetaVideo is invalid (error is set using err()), the error message is
+     * returned.
      *
      * @return string
      */
     function render() {
-        $arr = array('status' => 'ok', 'msg' => '', 'id' => $this->id, 'type' => $this->type, 'tn' => $this->tn, 'width' => $this->width, 'height' => $this->height, 'here' => $this->here);
+        if ($this->error){
+            $arr = $this->error;
+        }else{
+            $arr = array('status' => 'ok', 'msg' => '', 'id' => $this->id, 'type' => $this->type, 'tn' => $this->tn, 'width' => $this->width, 'height' => $this->height, 'here' => $this->here);
+        }
         return json_encode($arr);
     }
 
