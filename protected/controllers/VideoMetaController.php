@@ -1,37 +1,22 @@
 <?php
 
 class VideometaController extends CController {
-    public function actions()
-    {
-        return array(
-            'markup'=>array(
-                'class'=>'CWebServiceAction',
-            ),
-        );
-    }
-
     /**
-     * @param string the content to markdown
-     * @return string with the markup
-     * @soap
+     * Return a set of properties that describe the video at the given url. The
+     * returned data is in JSON format.
+     *
+     * @param $url
+     *
+     * @return string
+     * @see MetaVideo
      */
-    // WEB SERVICE CALL
-    public function getVideometa($url) {
-        $parser = new MetaVideo($url);
-        return $parser->render();
-    }
-
-    //GET -> http://localhost/en/markdown/getMarkup?value=adfasd---fdgdfgfd
-    //POST -> http://localhost/en/markdown/getMarkup
-    public function actionGetMeta()
-    {
-        if(isset($_REQUEST['url'])){
-            echo $this->getVideometa($_REQUEST['url']);
+    public function actionGetMeta() {
+        $videoUrl = (isset($_REQUEST['url'])) ? $_REQUEST['url'] : null;
+        if ($videoUrl) {
+            $meta = new MetaVideo($videoUrl);
+            echo $meta->render();
         }
-
     }
-
-
 }
 
 ?>
