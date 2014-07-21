@@ -6,6 +6,7 @@
  * video, the type (youtube or vimeo), a thumbnail (including width x height).
  *
  * @author kjartan
+ * @author Jan Willem
  */
 class MetaVideo {
     var $tn = -1;
@@ -53,7 +54,7 @@ class MetaVideo {
         }
 
         // 2.2 Get the thumb from the video service.
-        if (strstr($this->url, "youtube")) {
+        if ($this->type == "youtube") {
             $meta = $this->getmetadata("http://gdata.youtube.com/feeds/api/videos/" . $this->id . "?alt=json");
 
             $meta = json_decode(trim($meta));
@@ -79,7 +80,7 @@ class MetaVideo {
             $this->ratio  = 16 / 9;
             $this->here   = 'you';
 
-        } elseif (strstr($this->url, "vimeo")) {
+        } elseif ($this->type == "vimeo") {
             $meta = $this->getmetadata('http://vimeo.com/api/v2/video/' . $this->id . '.php');
             // vimeo.com/api/v2/video/6518700.php
 
@@ -107,7 +108,7 @@ class MetaVideo {
             $this->here   = "vim";
 
         } else {
-            $this->err("Don't seem like a video link");
+            $this->err("Unsupported video site. Should be either youtube or vimeo.");
             return;
         }
 
@@ -118,7 +119,7 @@ class MetaVideo {
      * Sets this MetaVideo's type and id by evaluating/parsing its url.
      */
     private function determineTypeAndId(){
-        if (strstr($this->url, "youtube")) {
+        if (strstr($this->url, "youtube") || strstr($this->url, "youtu.be")) {
             $this->type = "youtube";
             $this->id   = $this->determineYoutubeId($this->url);
         } else if (strstr($this->url, "vimeo")) {
@@ -136,6 +137,8 @@ class MetaVideo {
      *
      * Can handle:
      * - https://www.youtube.com/watch?v=VfzeA4gm3Ug (ID in query parameter 'v')
+     * - http://www.youtube.com/embed/6MfJEzVEjCw
+     * - http://youtu.be/1tmtaQ3FXR8
      *
      * @param string $url
      *
@@ -144,17 +147,26 @@ class MetaVideo {
     private function determineYoutubeId($url) {
         // Parse the url. If it's not a url or doesn't contain a query, return null.
         $urlParts = parse_url($url);
-        if (!$urlParts || !isset($urlParts['query'])){
+        if (!$urlParts){
             return null;
+        }else if ($urlParts['path'] == '/watch'){
+            // We expect the v=ID parameter in the youtube url.
+            // Like https://www.youtube.com/watch?v=VfzeA4gm3Ug
+            if (isset($urlParts['query'])){
+                parse_str($urlParts['query'], $parameters);
+                if (isset($parameters['v'])){
+                    return $parameters['v'];
+                }
+            }
+        }else if(strpos($urlParts['path'], '/embed') === 0 || $urlParts['host'] == 'youtu.be'){
+            // The ID is the last part of the path (ie. it's not in the query).
+            // Like http://www.youtube.com/embed/6MfJEzVEjCw
+            // Like http://youtu.be/1tmtaQ3FXR8
+            $pathParts = explode('/', $urlParts['path']);
+            return $pathParts[count($pathParts)-1];
         }
-        // We expect the v=ID parameter in the youtube url. If it's there, return
-        // it. Otherwise return null.
-        parse_str($urlParts['query'], $parameters);
-        if (isset($parameters['v'])){
-            return $parameters['v'];
-        }else{
-            return null;
-        }
+
+        return null;
     }
 
     /**
