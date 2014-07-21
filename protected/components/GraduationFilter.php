@@ -121,22 +121,20 @@ class GraduationFilter extends CWidget {
 
                 $criteria->select = 'ownerId';
 
-                $_condition = "namespaceId = 4 AND ownerId != ''";
-                $_param = array();
+                $_condition = "namespaceId = :namespaceId AND ownerId != ''";
+                $_param = array(":namespaceId"=>ns::GRADUATION);
 
                 if($this->selectedYear != null)
                 {
                     $_condition .= " AND item.year = :year";
-                    $_param = array(':year'=> $this->selectedYear);
+                    $_param[':year'] = $this->selectedYear;
                 }
 
                 if($this->selectedCategory != null)
                 {
                     $_categoryId = category::model()->find('name = :name', array(':name'=>str_replace("-", " ", $this->selectedCategory)))->id;
                     $_condition .= " AND item.categoryId = :categoryId";
-                    $_p = array(':categoryId'=>$_categoryId);
-
-                    $_param = array_merge($_param, $_p);
+                    $_param[':categoryId'] = $_categoryId;
                 }
 
                 $criteria->condition = $_condition;

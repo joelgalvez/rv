@@ -494,7 +494,7 @@ class ItemController extends CController {
                                 //$newUploads[$i] = true;
                             }
 
-                            if(($item->namespaceId == 2 || $item->namespaceId == 1) && $itemUploads[$i]->filePathNl != '' )
+                            if(($item->namespaceId == ns::NEWS || $item->namespaceId == ns::PAGE) && $itemUploads[$i]->filePathNl != '' )
                             {
                                 $filesNl[$i] = dirname($_SERVER['SCRIPT_FILENAME']).
                                 Yii::app()->params['tempFolder'].

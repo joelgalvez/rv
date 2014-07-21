@@ -29,7 +29,7 @@
                     $title = ($lnId == 1)?$model->title : $model->titleNl;
                     $qname = ($lnId == 1)?'enname':'nlname';
 
-                    if( $model->namespaceId != 1 && $model->namespaceId != 2)
+                    if( $model->namespaceId != ns::PAGE && $model->namespaceId != ns::NEWS)
                     {
                         $qname = 'fname';
                         $qvalue = $model->friendlyUrl;
@@ -51,7 +51,7 @@
                 <span class="grid"><a href="<?php echo $ownerf; ?>"><?php echo $owner; ?></a></span>
                 <span class="grid"><a href="<?php echo $editorf; ?>"><?php echo $editor; ?></a></span>
                 <span class="grid grid2"><?php echo CHtml::link($title,array('webPage/'. strtolower($model->namespace->name), $qname=>$qvalue )); ?></span>
-                <?php if($model->namespaceId == 3): ?>
+                <?php if($model->namespaceId == ns::PROJECT): ?>
                     <span class="grid grids">[<?php echo CHtml::link("Update",array('item/update','id'=>$model->id, 'nid'=>$model->namespaceId), array('class'=>'iframe')); ?>]</span>
                 <?php else: ?>
                     <span class="grid grids">[<?php echo CHtml::link("Update",array('item/adminUpdate','id'=>$model->id), array('class'=>'iframe')); ?>]</span>

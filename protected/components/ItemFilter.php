@@ -99,11 +99,11 @@ class ItemFilter {
             $criteriaY = new CDbCriteria();
             $criteriaY->distinct = true;
             $criteriaY->select = 'year';
-            $criteriaY->condition = "namespaceId = 4 AND year != ''";
+            $criteriaY->condition = "namespaceId = :namespaceId AND year != ''";
             $criteriaY->order = "year desc";
             $criteriaY->limit = 1;
             $_year = item::model()->find($criteriaY)->year;
-
+            $_param[':namespaceId'] = ns::GRADUATION;
         }
         if($_year != null && $_year != 0) {
             $_condition .= " AND item.year = :year";
@@ -296,7 +296,7 @@ class ItemFilter {
                         'namespaceId'=>$_v->namespaceId,
                     );
                 }else {
-                    $_v->name = ($v->namespaceId == 2)? $v->title : $_v->title;
+                    $_v->name = ($v->namespaceId == ns::NEWS)? $v->title : $_v->title;
                     $_v->item = $v;
 
                     $_editor = $_v->editor == null ? '' : $_v->editor->name;

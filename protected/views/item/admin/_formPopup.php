@@ -347,24 +347,24 @@
             $descriptiontext = '';
             $descriptiontext_nl = '';
             switch ($item->namespaceId) {
-                case '1':
+                case ns::PAGE:
                     $titletext = 'Enter page name';
                     $titletext_nl = 'Voer pagina naam';
                     $descriptiontext = 'Enter main text';
                     $descriptiontext_nl = 'Voer hoofdtekst';
                     break;
-                case '2':
+                case ns::NEWS:
                     $titletext = 'Enter news title';
                     $titletext_nl = 'Voer nieuws titel';
                     $descriptiontext = 'Enter main text';
                     $descriptiontext_nl = 'Voer hoofdtekst';
                     break;
-                case '3':
+                case ns::PROJECT:
                     $columns = '';
                     $titletext = 'Enter project title';
                     $descriptiontext = 'Enter project description';
                     break;
-                case '4':
+                case ns::GRADUATION:
                     $titletext = 'Enter graduation title';
                     $descriptiontext = 'Enter graduation description';
                     break;
@@ -391,10 +391,10 @@
                 </div>
                 <div class="np_general tabwin">
                     <div id="en_gen" class="half">
-                        <p class="<?php echo Util::HiddenIf( $item->namespaceId == 3); echo Util::HiddenIf( $item->namespaceId == 4); ?>">en</p>
+                        <p class="<?php echo Util::HiddenIf( $item->namespaceId == ns::PROJECT); echo Util::HiddenIf( $item->namespaceId == ns::GRADUATION); ?>">en</p>
                         <p id="itemtitlep"><?php echo CHtml::activeTextField($item,"title",array('size'=>30,'maxlength'=>256, 'title'=>$titletext, 'class'=>'inp_title defaultText')); ?></p>
                         <p><?php echo CHtml::activeTextArea($item,"text",array('rows'=>6, 'cols'=>50, 'class'=>'defaultText inp_text', 'title'=>$descriptiontext)); ?></p>
-                        <p id="friendlyurlen" class="<?php echo Util::HiddenIf( $item->namespaceId == 3); echo Util::HiddenIf( $item->namespaceId == 4); ?>">
+                        <p id="friendlyurlen" class="<?php echo Util::HiddenIf( $item->namespaceId == ns::PROJECT); echo Util::HiddenIf( $item->namespaceId == ns::GRADUATION); ?>">
                             Friendly url: <?php echo Yii::app()->createUrl("webPage/". strtolower($extra['namespace']), array('enname'=>'')); ?> <span class="generate short" style="display:none" id="_friendlyUrl"></span>
                             <?php echo CHtml::activeTextField($item,"friendlyUrl",array('size'=>40,'maxlength'=>1024)); ?>
                         </p>
@@ -440,7 +440,7 @@
                     </div>
                 </div>
                 <div class="np_advanced tabwin">
-                    <?php if($item->namespaceId != 2) { ?>
+                    <?php if($item->namespaceId != ns::NEWS) { ?>
                     <div class="third"><p><label>Online:</label><?php echo CHtml::activeTextField($item,"online"); ?></p></div>
                     <div class="third"><p><label>Offline:</label><?php echo CHtml::activeTextField($item,"offline"); ?></p></div>
                     <?php  } ?>
@@ -496,7 +496,7 @@
 
                 </div>
                 <div class="fullwidth">
-                    <?php if($item->namespaceId == 2) { ?>
+                    <?php if($item->namespaceId == ns::NEWS) { ?>
                     <div class="l rs5"><p><label>Valid from:</label><?php echo CHtml::activeTextField($item,"online"); ?></p></div>
                     <div class="l"><p><label>Valid to:</label><?php echo CHtml::activeTextField($item,"offline"); ?></p></div>
                     <div class="clear"></div>
@@ -574,7 +574,7 @@
                             Upload: <span><?php echo CHtml::activeRadioButtonList($itemUpload,"uploadtype[$i]",array(1=>"Image",2=>"Video", 3=>"Text"))?></span>
                         </div>
                         <div id="fileInput_<?php echo $i; ?>" class="simple <?php echo Util::HiddenIf( $itemUpload->type != 'upload'); ?>">
-                            <div id="uploadimgdiv_<?php echo $i; ?>" class="split l <?php echo Util::HiddenIf( $item->namespaceId == 3); echo Util::HiddenIf( $itemUpload->uploadtype == 2);  ?> ">
+                            <div id="uploadimgdiv_<?php echo $i; ?>" class="split l <?php echo Util::HiddenIf( $item->namespaceId == ns::PROJECT); echo Util::HiddenIf( $itemUpload->uploadtype == 2);  ?> ">
                                 <?php echo CHtml::activeHiddenField($itemUpload,"filePath[$i]"); ?>
                                 <?php echo CHtml::activeHiddenField($itemUpload,"fileName[$i]"); ?>
                             </div>
@@ -601,7 +601,7 @@
                             <?php echo CHtml::activeTextField($itemUpload,"title[$i]",array('size'=>30,'maxlength'=>512, 'class'=>'inp_title defaultText', 'title'=>'Enter title')); ?>
                         </div>
 
-                        <div class="simple <?php echo Util::HiddenIf( $itemUpload->type != 'upload' && $itemUpload->type != 'factbox' );  echo  Util::LeftIf( $item->namespaceId == 3) ?>" id="uploadText<?php echo $i; ?>"  >
+                        <div class="simple <?php echo Util::HiddenIf( $itemUpload->type != 'upload' && $itemUpload->type != 'factbox' );  echo  Util::LeftIf( $item->namespaceId == ns::PROJECT) ?>" id="uploadText<?php echo $i; ?>"  >
                             <?php echo CHtml::activeTextArea($itemUpload,"text[$i]",array('rows'=>6, 'cols'=>27, 'class'=>'inp_text defaultText '.$description_class, 'title'=>$description_text)); ?>
                         </div>
                         <div class="clear"></div>
@@ -611,7 +611,7 @@
                         </div>
                         <!--online was here-->
                         
-                        <div class="simple <?php echo Util::HiddenIf( $item->namespaceId == 3 ); echo Util::HiddenIf( $item->namespaceId == 4 ); ?>">
+                        <div class="simple <?php echo Util::HiddenIf( $item->namespaceId == ns::PROJECT ); echo Util::HiddenIf( $item->namespaceId == ns::GRADUATION ); ?>">
                             <?php echo CHtml::activeLabelEx($itemUpload,'position'); ?>
                             <?php echo CHtml::activeTextField($itemUpload,"position[$i]",array('class'=>'position')); ?>
 
@@ -695,7 +695,7 @@
                         </div>
                     </div>
                     <div class="half last">
-                        <div id="fileInput_<?php echo $i; ?>_nl" class="simple <?php echo Util::HiddenIf( !( $itemUpload->type == 'upload'  && ($item->namespaceId == 2  || $item->namespaceId == 1) ) ); ?>">
+                        <div id="fileInput_<?php echo $i; ?>_nl" class="simple <?php echo Util::HiddenIf( !( $itemUpload->type == 'upload'  && ($item->namespaceId == ns::NEWS  || $item->namespaceId == ns::PAGE) ) ); ?>">
                             <div class="split l <?php echo Util::HiddenIf( $itemUpload->uploadtype == 2); ?>">
                                 <?php echo CHtml::activeHiddenField($itemUpload,"filePathNl[$i]"); ?>
                                 <?php echo CHtml::activeHiddenField($itemUpload,"fileNameNl[$i]"); ?>
@@ -715,14 +715,14 @@
                         <div class="hidden" id="imageHeight<?php echo $i; ?>Nl">
                             <?php echo CHtml::activeTextField($itemUpload,"imageHeightNl[$i]"); ?>
                         </div>
-                        <div id="uploadFile<?php echo $i; ?>_preview_nl" class="l previewimage <?php echo Util::HiddenIf( ! ($itemUpload->type == 'upload' && ($item->namespaceId == 2 || $item->namespaceId == 1 ))); ?>" >
+                        <div id="uploadFile<?php echo $i; ?>_preview_nl" class="l previewimage <?php echo Util::HiddenIf( ! ($itemUpload->type == 'upload' && ($item->namespaceId == ns::NEWS || $item->namespaceId == ns::PAGE ))); ?>" >
                             <img id="uploadFile<?php echo $i; ?>_preview_image_nl" src="<?php echo $itemUpload->filePathNl.$itemUpload->fileNameNl; ?>" class="<?php echo Util::HiddenIf( $itemUpload->uploadtype != 1); ?>" width="125"/>
                         </div>
                         <div class="simple <?php echo Util::HiddenIf( ($itemUpload->type != 'factbox') && ($itemUpload->type != 'users') ); ?>" id="uploadTitleNl<?php echo $i; ?>">
                             <?php echo CHtml::activeTextField($itemUpload,"titleNl[$i]",array('size'=>30,'maxlength'=>512, 'class'=>'inp_title defaultText', 'title'=>'Voer de titel in')); ?>
                         </div>
 
-                        <div class="simple <?php echo Util::HiddenIf( $itemUpload->type != 'factbox'  && !($itemUpload->type == 'upload'  && ($item->namespaceId == 2 || $item->namespaceId == 1) )); ?>" id="uploadTextNl<?php echo $i; ?>"  >
+                        <div class="simple <?php echo Util::HiddenIf( $itemUpload->type != 'factbox'  && !($itemUpload->type == 'upload'  && ($item->namespaceId == ns::NEWS || $item->namespaceId == ns::PAGE) )); ?>" id="uploadTextNl<?php echo $i; ?>"  >
                             <?php echo CHtml::activeTextArea($itemUpload,"textNl[$i]",array('rows'=>6, 'cols'=>50, 'class'=>'inp_text defaultText '.$description_class, 'title'=>$description_text_nl)); ?>
                         </div>
 
@@ -809,5 +809,3 @@
         <!-- attachment list end -->
     </div>
 </div>
-
-

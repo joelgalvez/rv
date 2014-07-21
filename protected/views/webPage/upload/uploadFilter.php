@@ -17,7 +17,7 @@
             <?php $ucur++; ?>
             
             <?php 
-                if(($filtered_user) && ($_upload->item->namespaceId == 4) && ($ucur == 1)) {
+                if(($filtered_user) && ($_upload->item->namespaceId == ns::GRADUATION) && ($ucur == 1)) {
             ?>
                 <div class="graduation-text">
                     

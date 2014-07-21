@@ -101,7 +101,7 @@ class WebPage extends CModel {
         $criteria->with = array("owner","editor");
         $criteria->order = 'modified desc';
         if ($ob == 'title') {
-            if ($namespaceid == 1) {
+            if ($namespaceid == ns::PAGE) {
                 $criteria->order = 'titleNl';
             } else {
                 $criteria->order = 'title';
