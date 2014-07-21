@@ -1,7 +1,5 @@
-u/*
-tmp/*
+/aspnet_client
 nbproject/*
-assets/*
 .DS_Store
 /index.iis5.php
 /Iirf.ini
