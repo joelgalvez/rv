@@ -69,6 +69,9 @@ class WebPageController extends CController {
                     $item->changeLocalization(true);
                 }
 
+                // Determine the view (within the webPage folder).
+                // If the item has a specific template set, use that.
+                // Otherwise use the name of the item's namespace (ie. Page, News, etc.).
                 if ($item->templateId != null) {
                     $_v = $item->templateId;
                     $this->render($item->templateId, array('model' => $item));
