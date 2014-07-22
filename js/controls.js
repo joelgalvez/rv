@@ -1490,7 +1490,7 @@ adminPanel.prototype = {
                     if (item.uploadtype == 1) {
                         d = $("#uploadsList" + pos + "sample").html();
                         d = d.replaceAll('{name}', item.name);
-                        d = d.replaceAll('%url%', (item.filePath + item.fileName));
+                        d = d.replaceAll('src=""', 'src="' + (item.filePath + item.fileName) + '"');
                     }
                     else if (item.uploadtype == 2) {
                         d = $("#uploadsList" + pos + "sampleVedio").html();

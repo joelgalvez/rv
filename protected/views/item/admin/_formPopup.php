@@ -589,7 +589,7 @@
                             <div class="clear"></div>
                         </div>
                         <div id="uploadFile<?php echo $i; ?>_preview" class="l previewimage <?php echo Util::HiddenIf( $itemUpload->type != 'upload'); ?>" >
-                            <img id="uploadFile<?php echo $i; ?>_preview_image" src = "<?php echo Yii::app()->request->baseUrl.$itemUpload->filePath.'150-'.$itemUpload->fileName; ?>" class="<?php echo Util::HiddenIf( $itemUpload->uploadtype != 1); ?>" width="125"/>
+                            <img id="uploadFile<?php echo $i; ?>_preview_image" src = "<?php if ($i > -1){ echo Yii::app()->request->baseUrl.$itemUpload->filePath.'150-'.$itemUpload->fileName; } ?>" class="<?php echo Util::HiddenIf( $itemUpload->uploadtype != 1); ?>" width="125"/>
                         </div>
                         <div class="hidden" id="imageWidth<?php echo $i; ?>">
                             <?php echo CHtml::activeTextField($itemUpload,"imageWidth[$i]"); ?>
@@ -728,7 +728,7 @@
 
                         <div id="uploadFilter<?php echo $i; ?>_preview" class="<?php echo Util::HiddenIf( $itemUpload->type != 'uploadFilter'); ?> list" >
                             <p>Filter uploads preview</p>
-                            <div class="hidden" id="uploadsList<?php echo $i; ?>sample"><p><img src="%url%" width="50px" height="50px" /></p><p class="s5">{name}</p></div>
+                            <div class="hidden" id="uploadsList<?php echo $i; ?>sample"><p><img src="" width="50px" height="50px" /></p><p class="s5">{name}</p></div>
                             <div class="hidden" id="uploadsList<?php echo $i; ?>sampleVedio"><p>
                                 <img id="uploadsList<?php echo $i; ?>-{id}vimg" src="" width="50px" height="50px" />
                             </p><p class="s5">{name}</p></div>
