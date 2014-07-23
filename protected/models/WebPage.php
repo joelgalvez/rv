@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Provides access to the pages (items) in this website. Note that there's no
+ * webpage table. The pages are stored in the items table.
+ *
+ * TODO: Merge this class with item?
+ *
+ * @see item
+ */
 class WebPage extends CModel {
 
     public function safeAttributes()
@@ -101,7 +109,7 @@ class WebPage extends CModel {
         $criteria->with = array("owner","editor");
         $criteria->order = 'modified desc';
         if ($ob == 'title') {
-            if ($namespaceid == 1) {
+            if ($namespaceid == ns::PAGE) {
                 $criteria->order = 'titleNl';
             } else {
                 $criteria->order = 'title';

@@ -9,7 +9,7 @@
 
             $criteria = new CDbCriteria();
             $criteria->condition = "ownerId = :ownerId AND namespaceId = :namespaceId";
-            $criteria->params = array(':ownerId'=>Yii::app()->user->id,':namespaceId'=>4);
+            $criteria->params = array(':ownerId'=>Yii::app()->user->id,':namespaceId'=>ns::GRADUATION);
             $criteria->order = 'item.year desc' ;
 
             $grad_item = item::model()->with('category','owner')->find($criteria);

@@ -120,17 +120,23 @@ class ItemController extends CController {
         }
     }
 
+    /**
+     * Let the current user modify the item given by request parameter 'nid'.
+     * This method only allows modifying projects and graduations. Other types
+     * of pages can only be modified by administrators (using actionAdminUpdate()).
+     * @throws CHttpException
+     */
     public function actionUpdate() {
         $nid = Util::Get('nid', 0);
 
-        if($nid == 3)
+        if($nid == ns::PROJECT)
         {
             $this->actionAdminUpdate();
-        }elseif($nid == 4){
+        }elseif($nid == ns::GRADUATION){
             $this->processAdminItems(true, true);
         }else
         {
-               throw new CHttpException(501, 'You are not authorized to perform this action.');
+            throw new CHttpException(501, 'You are not authorized to perform this action.');
         }
     }
 
@@ -488,7 +494,7 @@ class ItemController extends CController {
                                 //$newUploads[$i] = true;
                             }
 
-                            if(($item->namespaceId == 2 || $item->namespaceId == 1) && $itemUploads[$i]->filePathNl != '' )
+                            if(($item->namespaceId == ns::NEWS || $item->namespaceId == ns::PAGE) && $itemUploads[$i]->filePathNl != '' )
                             {
                                 $filesNl[$i] = dirname($_SERVER['SCRIPT_FILENAME']).
                                 Yii::app()->params['tempFolder'].

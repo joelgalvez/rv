@@ -1,6 +1,5 @@
 <?php
 
-
 class SearchController extends CController {
     public $defaultAction='index';
 
@@ -64,30 +63,27 @@ class SearchController extends CController {
     }
 
     public function actionPage(){
-        $this->_search(1, "namespaceId = 1", '(title like :q OR text like :q OR uploadTitle like :q OR uploadText like :q OR owner like :q OR category like :q)', false ,true);
+        $this->_search(1, "namespaceId = " . ns::PAGE, '(title like :q OR text like :q OR uploadTitle like :q OR uploadText like :q OR owner like :q OR category like :q)', false ,true);
     }
 
     public function actionNews() {
-        $this->_search(1, "namespaceId = 2", '(uploadTitle like :q OR uploadText like :q OR owner like :q OR category like :q)', true);
+        $this->_search(1, "namespaceId = " . ns::NEWS, '(uploadTitle like :q OR uploadText like :q OR owner like :q OR category like :q)', true);
     }
 
     public function actionProject() {
 
-        $this->_search(1, "(namespaceId = 3 or namespaceId = 4)", '(title like :q OR text like :q OR uploadTitle like :q OR uploadText like :q OR owner like :q OR category like :q)', true, true);
+        $this->_search(1, "(namespaceId = " . ns::PROJECT . " or namespaceId = " . ns::GRADUATION . ")", '(title like :q OR text like :q OR uploadTitle like :q OR uploadText like :q OR owner like :q OR category like :q)', true, true);
     }
 
     public function actionPageNl(){
-        $this->_search(2, "namespaceId = 1", '(title like :q OR text like :q OR uploadTitle like :q OR uploadText like :q OR owner like :q OR category like :q)', false ,true);
+        $this->_search(2, "namespaceId = " . ns::PAGE, '(title like :q OR text like :q OR uploadTitle like :q OR uploadText like :q OR owner like :q OR category like :q)', false ,true);
     }
 
     public function actionNewsNl() {
-        $this->_search(2, "namespaceId = 2", '(uploadTitle like :q OR uploadText like :q OR owner like :q OR category like :q)', true);
+        $this->_search(2, "namespaceId = " . ns::NEWS, '(uploadTitle like :q OR uploadText like :q OR owner like :q OR category like :q)', true);
     }
 
     public function actionProjectNl() {
-
-        $this->_search(1, "(namespaceId = 3 or namespaceId = 4)", '(title like :q OR text like :q OR uploadTitle like :q OR uploadText like :q OR owner like :q OR category like :q)', true ,true);
+        $this->_search(1, "(namespaceId = " . ns::PROJECT . " or namespaceId = " . ns::GRADUATION . ")", '(title like :q OR text like :q OR uploadTitle like :q OR uploadText like :q OR owner like :q OR category like :q)', true ,true);
     }
-
-
 }

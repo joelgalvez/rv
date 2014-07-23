@@ -138,7 +138,7 @@ websites:
  <?php
 if($selectedUser) {
     //echo('Style me and place me');
-    $count = ItemUserInfo::model()->count("namespaceId=3 and friendlyName= :name", array(":name"=>$selectedUser));
+    $count = ItemUserInfo::model()->count("namespaceId = :namespaceId AND friendlyName = :name", array(":namespaceId"=>ns::PROJECT, ":name"=>$selectedUser));
     if($count > 0) {
         echo('<div class="file grad-oldprojects"><a href="'.Yii::app()->request->baseUrl."/student/".$selectedUser.'">See '.$count.' old projects</a></div>');
     }
