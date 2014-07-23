@@ -88,7 +88,8 @@ if ($upload->uploadtype != 3) {
         $size = $h;
     }
 
-    if ($size < end(array_keys($sizes))) {
+    $sizeKeys = array_keys($sizes);
+    if ($size < end($sizeKeys)) {
         $sizes[$size] = $filename;
     }
 
