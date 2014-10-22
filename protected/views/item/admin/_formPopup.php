@@ -773,8 +773,27 @@
                                     </script>
                                 </span>
                                 <span>
-                                    <?php echo CHtml::activeLabelEx($itemUpload,'year'); ?>
-                                    <?php echo CHtml::activeDropDownList($itemUpload,"year[$i]", array("--none--","1"=>"1st","2"=>"2nd","3"=>"3rd","4"=>"4th","5"=>"5th", "2009"=>"Graduated 2009","2010"=>"Graduated 2010","2011"=>"Graduated 2011","2012"=>"Graduated 2012","2013"=>"Graduated 2013")); ?>
+                                    <?php
+                                        echo CHtml::activeLabelEx($itemUpload,'year');
+                                        echo CHtml::activeDropDownList(
+                                            $itemUpload,
+                                            "year[$i]",
+                                            array(
+                                                "--none--",
+                                                "1"=>"1st",
+                                                "2"=>"2nd",
+                                                "3"=>"3rd",
+                                                "4"=>"4th",
+                                                "5"=>"5th",
+                                                "2014"=>"Graduated 2014",
+                                                "2013"=>"Graduated 2013",
+                                                "2012"=>"Graduated 2012",
+                                                "2011"=>"Graduated 2011",
+                                                "2010"=>"Graduated 2010",
+                                                "2009"=>"Graduated 2009"
+                                            )
+                                        );
+                                    ?>
                                 </span>
                                 <span>
                                     <input type="checkbox" <?php echo ((bool)$extra['useGroup'][$i] == true)? "checked":""; ?> name="ItemUpload[<?php echo $i; ?>][useGroup]" id="uploadSelectUserGroup_<?php echo $i; ?>">
