@@ -135,8 +135,14 @@ td {
 	border-bottom:1px solid #000;
 }
 
+/* Utilities */
+
 .hidden {
     display:none;
+}
+
+.p {
+    margin-bottom: 10px;
 }
 
 /* Menu */
