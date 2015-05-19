@@ -208,138 +208,184 @@ class UserController extends CController {
         ));
     }
 
+    /**
+     * Bulk import and/or update a batch of students, provided by an uploaded
+     * Excel sheet with the following columns:
+     *
+     * <ol>
+     *  <li>(A) [EMPTY]</li>
+     *  <li>(B) datumbestand</li>
+     *  <li>(C) Ingangsdatum inschrijfgroep</li>
+     *  <li>(D) Actiefcode opleiding CSA</li>
+     *  <li>(E) Studentnummer - Used to identify the student (the user.userId column)</li>
+     *  <li>(F) Achternaam</li>
+     *  <li>(G) Voorvoegsels</li>
+     *  <li>(H) Roepnaam</li>
+     *  <li>(I) Voorletters</li>
+     *  <li>(J) Aanvangsjaar instelling (student)</li>
+     *  <li>(K) Inschrijfgroep - A code that starts with 4 chars, optionally with a second part, which is ignored. This code is matched with a category.id.</li>
+     *  <li>(L) Instellingstatus - A code that determines a) if the student has graduated already or not and b) if the student is active.</li>
+     *  <li>(M) klasjaar - Either 1, 2, 3, 4, E (Exchange), M (master), O (orientation), V (vooropleiding/preschool)</li>
+     *  <li>(N) Omschrijving inschrijfgroep</li>
+     *  <li>(O) Geslacht</li>
+     *  <li>(P) Geboortedatum</li>
+     *  <li>(Q) Leeftijd</li>
+     *  <li>(R) Landnaam nationaliteit</li>
+     *  <li>(S) E-mail adres</li>
+     *  <li>(T) Mobiel telefoonnummer</li>
+     * </ol>
+     *
+     * Note that:
+     * <ul>
+     *  <li>Students doing a Master (klasjaar (column M) = M) are not processed. Why is this?</li>
+     *  <li>If a student already exists, only the following fields are updated: email, year, category, active and graduated</li>
+     *  <li>If it's a new student, the following fields are stored as well: userId (Studentnummer), groupId (always student), password (system generated) and friendlyName.</li>
+     * </ul>
+     */
     public function actionImport() {
-    //if($_POST['user']) {
         if (!empty($_FILES)) {
-            $file = CUploadedFile::getInstanceByName("filePath");
+            $file     = CUploadedFile::getInstanceByName("filePath");
             $gradyear = $_POST['gradyear'];
 
             error_reporting(E_ALL ^ E_NOTICE);
             $data = new Spreadsheet_Excel_Reader($file->tempName);
 
-            $importSql = '';
-            $categoryCode = array (
+            $categoryCode = array(
                 "DZBJ1" => "DOGtime Basisjaar 1",
                 "DZBJ2" => "DOGtime Basisjaar 2",
-                "DZBK" => "DOGtime Beeldende Kunst",
-                "DZMM" => "DOGtime ID UM",
-                "ORC2" => "Orientatiejaar",
-                "VOAV" => "VAV",
-                "VOBA" => "inter architecture",
-                "VOBJ" => "Basisjaar",
-                "VOBK" => "Beeldende Kunst",
-                "VOED" => "Edelsmeden",
-                "VOFO" => "Fotografie",
-                "VOGL" => "Glas",
-                "VOGO" => "Grafisch Ontwerpen",
-                "VOID" => "DesignLAB",
-                "VOKR" => "Keramiek",
-                "VOMD" => "Mode",
-                "VOOR" => "Preparatory Course",
-                "VOSA" => "Beeld en Taal",
-                "VOTE" => "TxT (Textiel)"
+                "DZBK"  => "DOGtime Beeldende Kunst",
+                "DZMM"  => "DOGtime ID UM",
+                "ORC2"  => "Orientatiejaar",
+                "VOAV"  => "VAV",
+                "VOBA"  => "inter architecture",
+                "VOBJ"  => "Basisjaar",
+                "VOBK"  => "Beeldende Kunst",
+                "VOED"  => "Edelsmeden",
+                "VOFO"  => "Fotografie",
+                "VOGL"  => "Glas",
+                "VOGO"  => "Grafisch Ontwerpen",
+                "VOID"  => "DesignLAB",
+                "VOKR"  => "Keramiek",
+                "VOMD"  => "Mode",
+                "VOOR"  => "Preparatory Course",
+                "VOSA"  => "Beeld en Taal",
+                "VOTE"  => "TxT (Textiel)"
             );
-            $categoryIds = array();
+            $categoryIds  = array();
 
-            $groupId = usergroup::model()->find('name =:name ', array(':name'=>'student' ) )->id;
+            $groupId    = usergroup::model()->find('name =:name ', array(':name' => 'student'))->id;
             $connection = Yii::app()->db;
-            $results = array();
-            $name = '';
-            //            for($i =1; $i < $data->rowcount(1); $i++) {
+            $results    = array();
             Yii::trace($data->rowcount());
-            for($i = 1; $i < $data->rowcount(); $i++) {
+            for ($i = 1; $i < $data->rowcount(); $i++) {
 
                 try {
-                    $year = $data->val($i,13);
+                    $year = $data->val($i, 13);
 
-                    if($year != 'M') {
+                    // Ignore master students.
+                    if ($year != 'M') {
 
-                        $userid = $data->val($i,5);
-                        $email =$data->val($i,19);
+                        $userid   = $data->val($i, 5);
+                        $email    = $data->val($i, 19);
                         $password = md5(Util::createRandomPassword());
-                        $name = $data->val($i,8);
-                        $midname = $data->val($i,7);
 
+                        // Construct a full name from Roepnaam, Tussenvoegsel and Achternaam.
+                        $name     = $data->val($i, 8);
+                        $midname  = $data->val($i, 7);
                         if (!empty($midname)) {
-                            $name = $name. ' ' .$midname;
+                            $name = $name . ' ' . $midname;
                         }
-                        $name = $name. ' ' .$data->val($i,6);
+                        $name     = $name . ' ' . $data->val($i, 6);
 
-                        $category = $data->val($i,11);
-
-                        if (substr($category,0,4) == 'DZBJ') {
-                            $category = substr($category,0,5);
+                        // Determine the category by taking the first chars from
+                        // the given Inschrijfgroep (column K). This code is
+                        // matched with the hard coded, plain text names in the
+                        // $categoryCode array above. And the resulting name is
+                        // used to get the actual category.id.
+                        // FIXME: The category table should contain the code as
+                        // a column, so that we don't need a hard coded list, nor
+                        // get in trouble when someone renames a category.
+                        $category = $data->val($i, 11);
+                        if (substr($category, 0, 4) == 'DZBJ') {
+                            $category = substr($category, 0, 5);
                         } else {
-                            $category = substr($category,0,4);
+                            $category = substr($category, 0, 4);
                         }
-                        if($categoryIds[$category] == null) {
-                            $catId = category::model()->find('name =:name ', array(':name'=>$categoryCode[$category] ) )->id;
+                        if ($categoryIds[$category] == null) {
+                            $catId                  = category::model()->find('name =:name ', array(':name' => $categoryCode[$category]))->id;
                             $categoryIds[$category] = $catId;
                         }
-                        $graduated = $data->val($i,12);
-                        if($graduated == 'VZ') {
-                            $active = 0;
+
+                        // Determine whether the student is active and/or graduated,
+                        // which is stored in Instellingstatus (column L).
+                        $graduated = $data->val($i, 12);
+                        if ($graduated == 'VZ') {
+                            $active    = 0;
                             $graduated = 0;
                         } elseif ($graduated == 'VM') {
-                            $active = 0;
+                            $active    = 0;
                             $graduated = 1;
                             if (!empty($gradyear)) {
                                 $year = $gradyear;
                             }
                         } else {
-                            $active = 1;
+                            $active    = 1;
                             $graduated = 0;
                         }
 
+                        $name  = trim($name);
+                        $strAt = strchr($email, '@');
 
-                        $name = trim($name);
-                        $strAt = strchr($email,'@');
-
-                        if(empty($email) || empty($name) || empty($userid) || empty($strAt)) {
+                        if (empty($email) || empty($name) || empty($userid) || empty($strAt)) {
                             Yii::trace("was empty");
-                            $results[] = array('status'=>false, 'name'=>$name, 'studentid'=>$userid,  'msg'=>false );
+                            $results[] = array(
+                                'status'    => false,
+                                'name'      => $name,
+                                'studentid' => $userid,
+                                'msg'       => false
+                            );
                         } else {
-
 
                             $_friendlyName = Util::getFriendlyString2($name);
 
-                            $_ncount =  User::model()->count("name = :name", array(':name'=>$name));
+                            $_ncount = User::model()->count("name = :name", array(':name' => $name));
 
-                            if($_ncount > 0) {
+                            if ($_ncount > 0) {
                                 $_friendlyName .= $_ncount;
                             }
 
-                            $importCmd = $connection->createCommand("INSERT INTO user (userId, groupId, categoryId, name, email, password, year, active, graduated, friendlyName)".
-                                " VALUES (:userid, :groupId, :categoryId, :name, :email, :password, :year, :active, :graduated, :friendlyName)".
-                                " ON DUPLICATE KEY UPDATE email = :email, year = :year, categoryId = :categoryId, active = :active, graduated = :graduated;" );
-                            $importCmd->bindParam(':userid',$userid);
-                            $importCmd->bindParam(':groupId' , $groupId);
-                            $importCmd->bindParam(':categoryId' , $categoryIds[$category]);
+                            $importCmd = $connection->createCommand("
+                                INSERT INTO user (userId, groupId, categoryId, name, email, password, year, active, graduated, friendlyName)
+                                VALUES (:userid, :groupId, :categoryId, :name, :email, :password, :year, :active, :graduated, :friendlyName)
+                                ON DUPLICATE KEY UPDATE email = :email, year = :year, categoryId = :categoryId, active = :active, graduated = :graduated;
+                            ");
+                            $importCmd->bindParam(':userid', $userid);
+                            $importCmd->bindParam(':groupId', $groupId);
+                            $importCmd->bindParam(':categoryId', $categoryIds[$category]);
                             $importCmd->bindParam(':name', $name);
-                            $importCmd->bindParam(':email' , $email);
-                            $importCmd->bindParam(':password' , $password);
-                            $importCmd->bindParam(':year' , $year);
-                            $importCmd->bindParam(':active' , $active);
-                            $importCmd->bindParam(':graduated' , $graduated);
-                            $importCmd->bindParam(':friendlyName' , $_friendlyName);
+                            $importCmd->bindParam(':email', $email);
+                            $importCmd->bindParam(':password', $password);
+                            $importCmd->bindParam(':year', $year);
+                            $importCmd->bindParam(':active', $active);
+                            $importCmd->bindParam(':graduated', $graduated);
+                            $importCmd->bindParam(':friendlyName', $_friendlyName);
 
                             $importCmd->execute();
                         }
                     }
-                }catch(Exception $e) {
-                    $results[] = array('status'=>false, 'name'=>'>'. $_friendlyName, 'studentid'=>$userid, 'msg'=>false );
+                } catch (Exception $e) {
+                    $results[] = array(
+                        'status'    => false,
+                        'name'      => '>' . $_friendlyName,
+                        'studentid' => $userid,
+                        'msg'       => false
+                    );
                 }
             }
 
-            // $command = $connection->createCommand($importSql);
+            $this->render('import', array('results' => $results));
 
-
-
-
-            $this->render('import', array('results'=> $results));
-
-
-        }else {
+        } else {
 
             $this->render('import');
         }
