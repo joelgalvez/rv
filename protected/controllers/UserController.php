@@ -279,7 +279,13 @@ class UserController extends CController {
 
             $groupId    = usergroup::model()->find('name =:name ', array(':name' => 'student'))->id;
             $connection = Yii::app()->db;
-            $results    = array();
+            $result     = array(
+                'total'     => 0,
+                'inserted'  => 0,
+                'updated'   => 0,
+                'skipped'   => 0,
+                'errors'    => array()
+            );
             Yii::trace($data->rowcount());
             for ($i = 1; $i < $data->rowcount(); $i++) {
 
@@ -288,6 +294,7 @@ class UserController extends CController {
 
                     // Ignore master students.
                     if ($year == 'M') {
+                        $result['skipped']++;
                         continue;
                     }
 
@@ -296,12 +303,10 @@ class UserController extends CController {
                     $password = md5(Util::createRandomPassword());
 
                     // Construct a full name from Roepnaam, Tussenvoegsel and Achternaam.
-                    $name     = $data->val($i, 8);
-                    $midname  = $data->val($i, 7);
-                    if (!empty($midname)) {
-                        $name = $name . ' ' . $midname;
-                    }
-                    $name     = $name . ' ' . $data->val($i, 6);
+                    $firstname = $data->val($i, 8);
+                    $midname   = $data->val($i, 7);
+                    $lastname  = $data->val($i, 6);
+                    $name      = trim($firstname . ' ' . ((!empty($midname)) ? $midname . ' ' : '') . $lastname);
 
                     // Determine the category by taking the first chars from
                     // the given Inschrijfgroep (column K). This code is
@@ -339,25 +344,38 @@ class UserController extends CController {
                         $graduated = 0;
                     }
 
-                    $name  = trim($name);
-                    $strAt = strchr($email, '@');
+                    // If these fields are all empty, let's assume it's an empty row...
+                    if (empty($firstname) && empty($lastname) && empty($email)) {
+                        Yii::trace("empty row");
+                        continue;
+                    }
 
+                    // Header row.
+                    if ($firstname == 'Roepnaam' || $lastname == 'Achternaam' || $email == 'E-mail adres'){
+                        Yii::trace("header row");
+                        continue;
+                    }
+
+                    $result['total']++;
+
+                    $strAt = strchr($email, '@');
                     if (empty($email) || empty($name) || empty($userid) || empty($strAt)) {
-                        Yii::trace("was empty");
-                        $results[] = array(
+                        Yii::trace("missing fields");
+                        $result['errors'][] = array(
                             'status'    => false,
+                            'row'       => $i,
                             'name'      => $name,
                             'studentid' => $userid,
-                            'msg'       => false
+                            'msg'       => "One or more fields were empty (email, name, studentnummer) or invalid (email)."
                         );
                     } else {
 
-                        $_friendlyName = Util::getFriendlyString2($name);
+                        $friendlyName = Util::getFriendlyString2($name);
 
                         $_ncount = User::model()->count("name = :name", array(':name' => $name));
 
                         if ($_ncount > 0) {
-                            $_friendlyName .= $_ncount;
+                            $friendlyName .= $_ncount;
                         }
 
                         $importCmd = $connection->createCommand("
@@ -374,21 +392,31 @@ class UserController extends CController {
                         $importCmd->bindParam(':year', $year);
                         $importCmd->bindParam(':active', $active);
                         $importCmd->bindParam(':graduated', $graduated);
-                        $importCmd->bindParam(':friendlyName', $_friendlyName);
+                        $importCmd->bindParam(':friendlyName', $friendlyName);
 
-                        $importCmd->execute();
+                        $affectedRows = $importCmd->execute();
+
+                        // The ON DUPLICATE construct returns 1 in case of an
+                        // insert and 2 in case of an update.
+                        // @see https://dev.mysql.com/doc/refman/5.0/en/insert-on-duplicate.html
+                        if ($affectedRows == 1){
+                            $result['inserted']++;
+                        }else{
+                            $result['updated']++;
+                        }
                     }
                 } catch (Exception $e) {
-                    $results[] = array(
+                    $result['errors'][] = array(
                         'status'    => false,
-                        'name'      => '>' . $_friendlyName,
+                        'row'       => $i,
+                        'name'      => '>' . $friendlyName,
                         'studentid' => $userid,
-                        'msg'       => false
+                        'msg'       => $e->getMessage()
                     );
                 }
             }
 
-            $this->render('import', array('results' => $results));
+            $this->render('import', array('result' => $result));
         }
     }
 
