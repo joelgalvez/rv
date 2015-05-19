@@ -243,7 +243,11 @@ class UserController extends CController {
      * </ul>
      */
     public function actionImport() {
-        if (!empty($_FILES)) {
+        if (empty($_FILES)) {
+            // Show the form.
+            $this->render('import');
+        } else {
+            // Handle the form.
             $file     = CUploadedFile::getInstanceByName("filePath");
             $gradyear = $_POST['gradyear'];
 
@@ -384,10 +388,6 @@ class UserController extends CController {
             }
 
             $this->render('import', array('results' => $results));
-
-        } else {
-
-            $this->render('import');
         }
     }
 
