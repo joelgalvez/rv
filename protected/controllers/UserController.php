@@ -287,95 +287,96 @@ class UserController extends CController {
                     $year = $data->val($i, 13);
 
                     // Ignore master students.
-                    if ($year != 'M') {
+                    if ($year == 'M') {
+                        continue;
+                    }
 
-                        $userid   = $data->val($i, 5);
-                        $email    = $data->val($i, 19);
-                        $password = md5(Util::createRandomPassword());
+                    $userid   = $data->val($i, 5);
+                    $email    = $data->val($i, 19);
+                    $password = md5(Util::createRandomPassword());
 
-                        // Construct a full name from Roepnaam, Tussenvoegsel and Achternaam.
-                        $name     = $data->val($i, 8);
-                        $midname  = $data->val($i, 7);
-                        if (!empty($midname)) {
-                            $name = $name . ' ' . $midname;
+                    // Construct a full name from Roepnaam, Tussenvoegsel and Achternaam.
+                    $name     = $data->val($i, 8);
+                    $midname  = $data->val($i, 7);
+                    if (!empty($midname)) {
+                        $name = $name . ' ' . $midname;
+                    }
+                    $name     = $name . ' ' . $data->val($i, 6);
+
+                    // Determine the category by taking the first chars from
+                    // the given Inschrijfgroep (column K). This code is
+                    // matched with the hard coded, plain text names in the
+                    // $categoryCode array above. And the resulting name is
+                    // used to get the actual category.id.
+                    // FIXME: The category table should contain the code as
+                    // a column, so that we don't need a hard coded list, nor
+                    // get in trouble when someone renames a category.
+                    $category = $data->val($i, 11);
+                    if (substr($category, 0, 4) == 'DZBJ') {
+                        $category = substr($category, 0, 5);
+                    } else {
+                        $category = substr($category, 0, 4);
+                    }
+                    if ($categoryIds[$category] == null) {
+                        $catId                  = category::model()->find('name =:name ', array(':name' => $categoryCode[$category]))->id;
+                        $categoryIds[$category] = $catId;
+                    }
+
+                    // Determine whether the student is active and/or graduated,
+                    // which is stored in Instellingstatus (column L).
+                    $graduated = $data->val($i, 12);
+                    if ($graduated == 'VZ') {
+                        $active    = 0;
+                        $graduated = 0;
+                    } elseif ($graduated == 'VM') {
+                        $active    = 0;
+                        $graduated = 1;
+                        if (!empty($gradyear)) {
+                            $year = $gradyear;
                         }
-                        $name     = $name . ' ' . $data->val($i, 6);
+                    } else {
+                        $active    = 1;
+                        $graduated = 0;
+                    }
 
-                        // Determine the category by taking the first chars from
-                        // the given Inschrijfgroep (column K). This code is
-                        // matched with the hard coded, plain text names in the
-                        // $categoryCode array above. And the resulting name is
-                        // used to get the actual category.id.
-                        // FIXME: The category table should contain the code as
-                        // a column, so that we don't need a hard coded list, nor
-                        // get in trouble when someone renames a category.
-                        $category = $data->val($i, 11);
-                        if (substr($category, 0, 4) == 'DZBJ') {
-                            $category = substr($category, 0, 5);
-                        } else {
-                            $category = substr($category, 0, 4);
-                        }
-                        if ($categoryIds[$category] == null) {
-                            $catId                  = category::model()->find('name =:name ', array(':name' => $categoryCode[$category]))->id;
-                            $categoryIds[$category] = $catId;
-                        }
+                    $name  = trim($name);
+                    $strAt = strchr($email, '@');
 
-                        // Determine whether the student is active and/or graduated,
-                        // which is stored in Instellingstatus (column L).
-                        $graduated = $data->val($i, 12);
-                        if ($graduated == 'VZ') {
-                            $active    = 0;
-                            $graduated = 0;
-                        } elseif ($graduated == 'VM') {
-                            $active    = 0;
-                            $graduated = 1;
-                            if (!empty($gradyear)) {
-                                $year = $gradyear;
-                            }
-                        } else {
-                            $active    = 1;
-                            $graduated = 0;
+                    if (empty($email) || empty($name) || empty($userid) || empty($strAt)) {
+                        Yii::trace("was empty");
+                        $results[] = array(
+                            'status'    => false,
+                            'name'      => $name,
+                            'studentid' => $userid,
+                            'msg'       => false
+                        );
+                    } else {
+
+                        $_friendlyName = Util::getFriendlyString2($name);
+
+                        $_ncount = User::model()->count("name = :name", array(':name' => $name));
+
+                        if ($_ncount > 0) {
+                            $_friendlyName .= $_ncount;
                         }
 
-                        $name  = trim($name);
-                        $strAt = strchr($email, '@');
+                        $importCmd = $connection->createCommand("
+                            INSERT INTO user (userId, groupId, categoryId, name, email, password, year, active, graduated, friendlyName)
+                            VALUES (:userid, :groupId, :categoryId, :name, :email, :password, :year, :active, :graduated, :friendlyName)
+                            ON DUPLICATE KEY UPDATE email = :email, year = :year, categoryId = :categoryId, active = :active, graduated = :graduated;
+                        ");
+                        $importCmd->bindParam(':userid', $userid);
+                        $importCmd->bindParam(':groupId', $groupId);
+                        $importCmd->bindParam(':categoryId', $categoryIds[$category]);
+                        $importCmd->bindParam(':name', $name);
+                        $importCmd->bindParam(':email', $email);
+                        $importCmd->bindParam(':password', $password);
+                        $importCmd->bindParam(':year', $year);
+                        $importCmd->bindParam(':active', $active);
+                        $importCmd->bindParam(':graduated', $graduated);
+                        $importCmd->bindParam(':friendlyName', $_friendlyName);
 
-                        if (empty($email) || empty($name) || empty($userid) || empty($strAt)) {
-                            Yii::trace("was empty");
-                            $results[] = array(
-                                'status'    => false,
-                                'name'      => $name,
-                                'studentid' => $userid,
-                                'msg'       => false
-                            );
-                        } else {
-
-                            $_friendlyName = Util::getFriendlyString2($name);
-
-                            $_ncount = User::model()->count("name = :name", array(':name' => $name));
-
-                            if ($_ncount > 0) {
-                                $_friendlyName .= $_ncount;
-                            }
-
-                            $importCmd = $connection->createCommand("
-                                INSERT INTO user (userId, groupId, categoryId, name, email, password, year, active, graduated, friendlyName)
-                                VALUES (:userid, :groupId, :categoryId, :name, :email, :password, :year, :active, :graduated, :friendlyName)
-                                ON DUPLICATE KEY UPDATE email = :email, year = :year, categoryId = :categoryId, active = :active, graduated = :graduated;
-                            ");
-                            $importCmd->bindParam(':userid', $userid);
-                            $importCmd->bindParam(':groupId', $groupId);
-                            $importCmd->bindParam(':categoryId', $categoryIds[$category]);
-                            $importCmd->bindParam(':name', $name);
-                            $importCmd->bindParam(':email', $email);
-                            $importCmd->bindParam(':password', $password);
-                            $importCmd->bindParam(':year', $year);
-                            $importCmd->bindParam(':active', $active);
-                            $importCmd->bindParam(':graduated', $graduated);
-                            $importCmd->bindParam(':friendlyName', $_friendlyName);
-
-                            $importCmd->execute();
-                        }
+                        $importCmd->execute();
                     }
                 } catch (Exception $e) {
                     $results[] = array(
