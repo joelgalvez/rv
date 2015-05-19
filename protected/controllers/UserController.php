@@ -294,6 +294,7 @@ class UserController extends CController {
 
                     // Ignore master students.
                     if ($year == 'M') {
+                        $result['total']++;
                         $result['skipped']++;
                         continue;
                     }
