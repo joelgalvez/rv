@@ -133,10 +133,17 @@ tr {
 
 td {
 	border-bottom:1px solid #000;
+	padding: 0 2px 1px 2px;
 }
+
+/* Utilities */
 
 .hidden {
     display:none;
+}
+
+.p {
+    margin-bottom: 10px;
 }
 
 /* Menu */
