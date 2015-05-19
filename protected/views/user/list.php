@@ -1,9 +1,10 @@
 <h2>User List</h2>
 
-<div class="actionBar p">
-[<?php echo CHtml::link('New User',array('create')); ?>]
-[<?php echo CHtml::link('Manage User',array('admin')); ?>]
-[<?php echo CHtml::link('Import/Update Students',array('import')); ?>]
+<div class="actionBar simple">
+    [<?php echo CHtml::link('User List',array('list')); ?>]
+    [<?php echo CHtml::link('New User',array('create')); ?>]
+    [<?php echo CHtml::link('Manage User',array('admin')); ?>]
+    [<?php echo CHtml::link('Import/Update Students',array('import')); ?>]
 </div>
 
 <?php $this->widget('CLinkPager',array('pages'=>$pages)); ?>
