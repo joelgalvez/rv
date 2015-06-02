@@ -78,17 +78,20 @@ class webtree extends CActiveRecord
 
         public function beforeSave()
         {
-            if(isset($this->parentId) && $this->parentId != null && $this->parentId != 0)
+            // First check if the parent has changed to the root, before
+            // determining the new depth.
+            if($this->parentId == 0)
+            {
+                $this->parentId = null;
+            }
+
+            // Determine the depth on this item's parent.
+            if($this->parentId != null)
             {
                 $this->depth = webtree::model()->findByPk($this->parentId)->depth + 1;
             }else
             {
                  $this->depth = 0;
-            }
-
-            if($this->parentId == 0)
-            {
-                unset($this->parentId);
             }
 
             return true;
