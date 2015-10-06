@@ -774,25 +774,22 @@
                                 </span>
                                 <span>
                                     <?php
-                                        echo CHtml::activeLabelEx($itemUpload,'year');
-                                        echo CHtml::activeDropDownList(
-                                            $itemUpload,
-                                            "year[$i]",
-                                            array(
-                                                "--none--",
-                                                "1"=>"1st",
-                                                "2"=>"2nd",
-                                                "3"=>"3rd",
-                                                "4"=>"4th",
-                                                "5"=>"5th",
-                                                "2014"=>"Graduated 2014",
-                                                "2013"=>"Graduated 2013",
-                                                "2012"=>"Graduated 2012",
-                                                "2011"=>"Graduated 2011",
-                                                "2010"=>"Graduated 2010",
-                                                "2009"=>"Graduated 2009"
-                                            )
+                                        // Build a list of 'years'. This consists of two sections:
+                                        // 1. The schoolgrades (1 till 5).
+                                        // 2. The graduation years (starting at 2009).
+                                        $years = array(
+                                            "--none--",
+                                            "1"=>"1st",
+                                            "2"=>"2nd",
+                                            "3"=>"3rd",
+                                            "4"=>"4th",
+                                            "5"=>"5th"
                                         );
+                                        for ($year = intval(date('Y')); $year>=2009; $year--){
+                                            $years[$year] = "Graduated " . $year;
+                                        }
+                                        echo CHtml::activeLabelEx($itemUpload,'year');
+                                        echo CHtml::activeDropDownList($itemUpload, "year[$i]", $years);
                                     ?>
                                 </span>
                                 <span>
